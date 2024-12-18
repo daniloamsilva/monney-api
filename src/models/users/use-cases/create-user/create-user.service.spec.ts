@@ -12,7 +12,7 @@ describe('CreateUserService', () => {
     createUserService = new CreateUserService(usersRepository);
   });
 
-  it('should not be able to create a new user with the same email', async () => {
+  it('should not be able to create a new user with the an email already used', async () => {
     const user = await usersRepository.save(UserFactory.create());
 
     await expect(
