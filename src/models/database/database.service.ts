@@ -5,10 +5,12 @@ import { Pool } from 'pg';
 export class DatabaseService {
   private pool: Pool;
 
-  constructor() {
+  constructor(testEnvironment = false) {
     this.pool = new Pool({
       host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
+      port: parseInt(
+        testEnvironment ? process.env.DB_TEST_PORT : process.env.DB_PORT,
+      ),
       database: process.env.DB_DATABASE,
       user: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,

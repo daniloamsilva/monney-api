@@ -2,12 +2,11 @@ import * as request from 'supertest';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
-import { CreateUserController } from './create-user.controller';
-import { Providers } from '../../providers.enum';
-import { UsersInMemoryRepository } from '@/repositories/users/users-in-memory.repository';
-import { CreateUserService } from './create-user.service';
+import { AppModule } from '@/app.module';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
+import { Providers } from '../../providers.enum';
 import { UserFactory } from '@/entities/user/user.factory';
+import { DatabaseService } from '@/models/database/database.service';
 
 describe('CreateUserController', () => {
   let app: INestApplication;
@@ -15,15 +14,11 @@ describe('CreateUserController', () => {
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      controllers: [CreateUserController],
-      providers: [
-        CreateUserService,
-        {
-          provide: Providers.USERS_REPOSITORY,
-          useClass: UsersInMemoryRepository,
-        },
-      ],
-    }).compile();
+      imports: [AppModule],
+    })
+      .overrideProvider(DatabaseService)
+      .useValue(new DatabaseService(true))
+      .compile();
 
     usersRepository = module.get(Providers.USERS_REPOSITORY);
 
@@ -35,6 +30,10 @@ describe('CreateUserController', () => {
       }),
     );
     await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   it('should not be able to create a new user with an invalid email', async () => {

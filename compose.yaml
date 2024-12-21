@@ -1,5 +1,7 @@
 services:
+
   database:
+    container_name: database
     image: postgres:17.2-alpine3.21
     environment:
       - POSTGRES_HOST=${DB_HOST}
@@ -8,4 +10,16 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
-      - 5432:5432
+      - ${DB_PORT}:5432
+
+  test-database:
+    container_name: test-database
+    image: postgres:17.2-alpine3.21
+    environment:
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_PORT=${DB_TEST_PORT}
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${DB_TEST_PORT}:5432
