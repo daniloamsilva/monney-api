@@ -35,8 +35,14 @@ describe('CreateUserService', () => {
 
     const newUser = await usersRepository.findByEmail('johndoe@email.com');
 
-    expect(newUser).not.toBeUndefined();
+    expect(newUser.id).toBeDefined();
+    expect(newUser.name).toBe('John Doe');
+    expect(newUser.email).toBe('johndoe@email.com');
     expect(newUser.password).not.toBe('pass1234');
+    expect(newUser.createdAt).not.toBeNull();
+    expect(newUser.updatedAt).not.toBeNull();
+    expect(newUser.deletedAt).toBeNull();
+
     expect(result).toMatchObject({ message: 'User created successfully' });
   });
 });

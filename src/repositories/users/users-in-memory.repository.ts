@@ -16,6 +16,6 @@ export class UsersInMemoryRepository implements UsersRepositoryInterface {
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
-    return this.users.find((user) => user.email === email);
+    return this.users.find((user) => user.email === email && !user.deletedAt);
   }
 }

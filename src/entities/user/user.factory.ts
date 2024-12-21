@@ -14,12 +14,17 @@ export class UserFactory {
       override?.email ??
       `${normalizedName.toLowerCase().replace(/\s/g, '')}@${faker.internet.domainName()}`;
 
+    const createdAt = override?.createdAt ?? faker.date.past();
+
     return new User(
       Object.assign(
         {
           name,
           email,
           password: faker.internet.password(),
+          createdAt,
+          updatedAt: createdAt,
+          deletedAt: null,
         },
         override,
       ),

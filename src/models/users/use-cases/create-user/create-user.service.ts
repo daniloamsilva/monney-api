@@ -22,7 +22,12 @@ export class CreateUserService {
       throw new ConflictException('User already exists');
     }
 
-    const user = new User(data);
+    const user = new User({
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
     await this.usersRepository.save(user);
 
     return {

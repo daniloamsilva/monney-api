@@ -4,7 +4,11 @@ export class User {
   email: string;
   password: string;
 
-  constructor({ id, name, email, password }: User) {
-    Object.assign(this, { id, name, email, password });
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date;
+
+  constructor(user: User) {
+    Object.assign(this, user);
   }
 }
