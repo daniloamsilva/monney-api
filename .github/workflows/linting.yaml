@@ -1,10 +1,10 @@
-name: Automated Tests
+name: Code Linting
 
 on: pull_request
 
 jobs:
-  jest:
-    name: Jest
+  eslint:
+    name: ESLint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,11 +18,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Copy .env.example to .env
-        run: cp .env.example .env
-
-      - name: Up Docker containers
-        run: docker compose up -d
-
-      - name: Run tests
-        run: npm test
+      - name: Run ESLint
+        run: npm run lint:check
