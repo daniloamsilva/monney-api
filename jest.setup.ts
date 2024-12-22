@@ -16,6 +16,7 @@ beforeAll(async () => {
     execSync('npm run migration:up', {
       env: {
         DATABASE_URL: `postgres://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_TEST_PORT}/${process.env.DB_DATABASE}`,
+        PATH: `${process.env.PATH}`,
       },
     });
     isDatabaseMigrated = true;
