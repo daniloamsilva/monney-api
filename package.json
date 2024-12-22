@@ -77,6 +77,10 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
+    "coveragePathIgnorePatterns": [
+      "main.ts",
+      "src/models/database/*"
+    ],
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "../jest.setup.ts"
