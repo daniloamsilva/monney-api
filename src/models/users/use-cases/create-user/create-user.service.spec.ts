@@ -43,6 +43,9 @@ describe('CreateUserService', () => {
     expect(newUser.updatedAt).not.toBeNull();
     expect(newUser.deletedAt).toBeNull();
 
-    expect(result).toMatchObject({ message: 'User created successfully' });
+    expect(result).toMatchObject({
+      statusCode: 201,
+      message: 'User created successfully',
+    });
   });
 });

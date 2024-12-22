@@ -31,6 +31,7 @@ export class CreateUserService {
     await this.usersRepository.save(user);
 
     return {
+      statusCode: 201,
       message: 'User created successfully',
     };
   }
