@@ -14,6 +14,7 @@ export class UsersPostgresRepository implements UsersRepositoryInterface {
 
   async save(user: User): Promise<User> {
     const findUser = await this.findByEmail(user.email);
+    console.log('estamos aqui');
 
     let query = '';
     let values = [];
