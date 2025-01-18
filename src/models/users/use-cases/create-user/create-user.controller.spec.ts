@@ -6,7 +6,7 @@ import { AppModule } from '@/app.module';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { Providers } from '../../providers.enum';
 import { UserFactory } from '@/entities/user/user.factory';
-import { DatabaseService } from '@/models/database/database.service';
+import { DatabaseService } from '@/infra/database/database.service';
 
 describe('CreateUserController', () => {
   let app: INestApplication;

@@ -7,7 +7,7 @@ import { CreateUserResponseDto } from './create-user.response.dto';
 import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { Providers } from '../../providers.enum';
-import { Queues } from '@/models/queues/queues.enum';
+import { Queues } from '@/infra/queues/queues.enum';
 
 @Injectable()
 export class CreateUserService {

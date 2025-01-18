@@ -3,7 +3,7 @@ import { v6 as uuid } from 'uuid';
 
 import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from './users.repository.interface';
-import { DatabaseService } from '@/models/database/database.service';
+import { DatabaseService } from '@/infra/database/database.service';
 import { Encryption } from '@/utils/encryption';
 
 export class UsersPostgresRepository implements UsersRepositoryInterface {
