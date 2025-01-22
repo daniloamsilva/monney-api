@@ -17,9 +17,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "migration:create": "node-pg-migrate -m src/models/database/migrations -t migrations create",
-    "migration:up": "node-pg-migrate -m src/models/database/migrations -t migrations up",
-    "migration:down": "node-pg-migrate -m src/models/database/migrations -t migrations down"
+    "migration:create": "node-pg-migrate -m src/infra/database/migrations -t migrations create",
+    "migration:up": "node-pg-migrate -m src/infra/database/migrations -t migrations up",
+    "migration:down": "node-pg-migrate -m src/infra/database/migrations -t migrations down"
   },
   "dependencies": {
     "@nestjs/bullmq": "^10.2.3",
