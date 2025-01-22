@@ -34,11 +34,10 @@ export class CreateUserService {
       deletedAt: null,
     });
     await this.usersRepository.save(user);
-    console.log('estamos aqui', user);
 
     await this.confirmationEmailQueue.add(
       `send-confirmation-${user.id}-${Date.now()}`,
-      { user },
+      user,
     );
 
     return {

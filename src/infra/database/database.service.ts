@@ -21,7 +21,6 @@ export class DatabaseService {
     const client = await this.pool.connect();
 
     try {
-      console.log('Database query:', query, params);
       return (await client.query(query, params)).rows;
     } catch (error) {
       console.error('Database query error:', error);
