@@ -1,4 +1,4 @@
-import { v6 as uuid } from 'uuid';
+import { v7 as uuid } from 'uuid';
 
 import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from './users.repository.interface';

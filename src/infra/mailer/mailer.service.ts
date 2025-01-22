@@ -1,30 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
-import Mail, { Address } from 'nodemailer/lib/mailer';
+import { Address } from 'nodemailer/lib/mailer';
+import * as hbs from 'nodemailer-express-handlebars';
+
+import { parseBoolean } from '@/utils/parseBoolean';
 
 type mailOptions = {
   from?: Address;
   recipients: Address[];
   subject: string;
-  html: string;
-  text?: string;
-  placeholders?: Record<string, string>;
+  template: string;
+  context?: Record<string, string>;
 };
 
 @Injectable()
 export class MailerService {
   async sendMail(mailOptions: mailOptions) {
-    const { from, recipients, subject, html, text } = mailOptions;
+    const { from, recipients, subject, template, context } = mailOptions;
 
-    const options: Mail.Options = {
+    const options = {
       from: from ?? {
         name: process.env.MAIL_FROM_NAME,
         address: process.env.MAIL_FROM_ADDRESS,
       },
       to: recipients,
       subject,
-      html,
-      text,
+      template,
+      context,
     };
 
     try {
@@ -38,12 +40,21 @@ export class MailerService {
     const transporter = nodemailer.createTransport({
       host: process.env.MAIL_HOST,
       port: parseInt(process.env.MAIL_PORT),
-      secure: false, // true for port 465, false for other ports
+      secure: parseBoolean(process.env.MAIL_SECURE),
       auth: {
         user: process.env.MAIL_USERNAME,
         pass: process.env.MAIL_PASSWORD,
       },
     });
+
+    transporter.use(
+      'compile',
+      hbs({
+        viewEngine: { defaultLayout: '' },
+        viewPath: 'src/infra/mailer/templates',
+        extName: '.hbs',
+      }),
+    );
 
     return transporter;
   }

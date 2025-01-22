@@ -9,9 +9,9 @@ export class MailerController {
   @Get()
   async handle() {
     return await this.mailerService.sendMail({
-      html: '<h1>Hello World</h1>',
       recipients: [{ address: 'test@email.com', name: 'Test' }],
       subject: 'Email Test',
+      template: 'confirmation-email',
     });
   }
 }

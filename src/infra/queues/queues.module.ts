@@ -2,7 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 
 import { Queues } from './queues.enum';
-import { ConfirmationEmailConsumer } from './consumers/confirmation_email.consumer';
+import { ConfirmationEmailConsumer } from './consumers/confirmation-email.consumer';
 
 @Global()
 @Module({
