@@ -1,4 +1,10 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -10,9 +16,11 @@ import {
 import { CreateUserService } from './create-user.service';
 import { CreateUserRequestDto } from './create-user.request.dto';
 import { CreateUserResponseDto } from './create-user.response.dto';
+import { DatabaseTransactionInterceptor } from '@/interceptors/database-transaction.interceptor';
 
 @ApiTags('Users')
 @Controller('users')
+@UseInterceptors(DatabaseTransactionInterceptor)
 export class CreateUserController {
   constructor(private readonly createUserService: CreateUserService) {}
 
