@@ -3,6 +3,7 @@ import { Job } from 'bullmq';
 
 import { Queues } from '../queues.enum';
 import { User } from '@/entities/user/user.entity';
+import { Token } from '@/entities/token/token.entity';
 import { MailerService } from '@/infra/mailer/mailer.service';
 
 @Processor(Queues.CONFIRMATION_EMAIL)
@@ -11,8 +12,9 @@ export class ConfirmationEmailConsumer extends WorkerHost {
     super();
   }
 
-  async process(job: Job<User>): Promise<void> {
-    const { name, email } = job.data;
+  async process(job: Job<{ user: User; token: Token }>): Promise<void> {
+    const { user, token } = job.data;
+    const { name, email } = user;
 
     try {
       await this.mailerService.sendMail({
@@ -21,7 +23,7 @@ export class ConfirmationEmailConsumer extends WorkerHost {
         template: 'confirmation-email',
         context: {
           name,
-          confirmationLink: `${process.env.APP_URL}/confirm-email?token=`,
+          confirmationLink: `${process.env.APP_URL}/confirm-email?token=${token.token}`,
           from: process.env.MAIL_FROM_NAME,
         },
       });

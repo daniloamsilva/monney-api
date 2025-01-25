@@ -4,6 +4,7 @@ import { CreateUserController } from './use-cases/create-user/create-user.contro
 import { CreateUserService } from './use-cases/create-user/create-user.service';
 import { Providers } from './providers.enum';
 import { UsersPostgresRepository } from '@/repositories/users/users-postgres.repository';
+import { TokensPostgresRepository } from '@/repositories/tokens/tokens-postgres.repository';
 
 @Module({
   controllers: [CreateUserController],
@@ -12,6 +13,10 @@ import { UsersPostgresRepository } from '@/repositories/users/users-postgres.rep
     {
       provide: Providers.USERS_REPOSITORY,
       useClass: UsersPostgresRepository,
+    },
+    {
+      provide: Providers.TOKENS_REPOSITORY,
+      useClass: TokensPostgresRepository,
     },
   ],
 })
