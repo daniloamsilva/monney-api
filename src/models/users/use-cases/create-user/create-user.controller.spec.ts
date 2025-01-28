@@ -7,6 +7,8 @@ import { UsersRepositoryInterface } from '@/repositories/users/users.repository.
 import { Providers } from '../../providers.enum';
 import { UserFactory } from '@/entities/user/user.factory';
 import { DatabaseService } from '@/infra/database/database.service';
+import { QueuesModule } from '@/infra/queues/queues.module';
+import { QueuesTestModule } from '@/infra/queues/queues-test.module';
 
 describe('CreateUserController', () => {
   let app: INestApplication;
@@ -16,6 +18,8 @@ describe('CreateUserController', () => {
     const module = await Test.createTestingModule({
       imports: [AppModule],
     })
+      .overrideModule(QueuesModule)
+      .useModule(QueuesTestModule)
       .overrideProvider(DatabaseService)
       .useValue(new DatabaseService(true))
       .compile();

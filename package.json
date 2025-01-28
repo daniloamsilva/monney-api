@@ -87,7 +87,7 @@
     "coverageDirectory": "../coverage",
     "coveragePathIgnorePatterns": [
       "main.ts",
-      "src/models/database/*"
+      "src/infra/database/*"
     ],
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
