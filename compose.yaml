@@ -23,3 +23,22 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - ${DB_TEST_PORT}:5432
+
+  redis:
+    container_name: redis
+    image: redis:7.4-alpine
+    command: [ "redis-server", "--requirepass", "${REDIS_PASSWORD}" ]
+    environment:
+      - REDIS_PASSWORD=your_secure_password
+    ports:
+      - ${REDIS_PORT}:6379
+
+  mailpit:
+    container_name: mailpit
+    image: axllent/mailpit:latest
+    ports:
+      - 8025:8025
+      - ${MAIL_PORT}:1025
+    environment:
+      - MAILPIT_UI_PORT=8025
+      - MAILPIT_SMTP_PORT=1025
