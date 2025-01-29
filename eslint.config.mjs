@@ -38,9 +38,7 @@ export default [
       sourceType: 'module',
 
       parserOptions: {
-        project: 'tsconfig.json',
-        tsconfigRootDir:
-          'C:\\Users\\WATCH BRASIL\\Documents\\projects\\monney-api',
+        project: './tsconfig.json',
       },
     },
 
