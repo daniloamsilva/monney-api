@@ -17,4 +17,5 @@ export class Token {
 
 export enum TokenType {
   CONFIRMATION_EMAIL = 'CONFIRMATION_EMAIL',
+  PASSWORD_RESET = 'PASSWORD_RESET',
 }

@@ -3,6 +3,7 @@ export class User {
   name: string;
   email: string;
   password: string;
+  confirmed_at?: Date;
 
   createdAt: Date;
   updatedAt: Date;

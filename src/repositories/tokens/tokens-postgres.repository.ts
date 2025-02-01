@@ -43,7 +43,7 @@ export class TokensPostgresRepository implements TokensRepositoryInterface {
       ];
     } else {
       token.token = uuid();
-      token.expiresAt = add(new Date(), { days: 7 });
+      token.expiresAt = token.expiresAt ?? add(new Date(), { days: 7 });
 
       query = `
         INSERT INTO tokens (user_id, token, type, expires_at, created_at, updated_at)

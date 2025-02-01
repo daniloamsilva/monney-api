@@ -61,6 +61,23 @@ export class UsersPostgresRepository implements UsersRepositoryInterface {
     return new User(rows[0]);
   }
 
+  async findById(id: string): Promise<User | undefined> {
+    const rows = await this.database.query(
+      `
+        SELECT * FROM users 
+        WHERE id = $1
+        AND deleted_at IS NULL;
+      `,
+      [id],
+    );
+
+    if (!rows.length) {
+      return undefined;
+    }
+
+    return new User(rows[0]);
+  }
+
   async findByEmail(email: string): Promise<User | undefined> {
     const rows = await this.database.query(
       `
