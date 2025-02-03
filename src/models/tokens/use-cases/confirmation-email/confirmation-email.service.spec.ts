@@ -78,7 +78,7 @@ describe('ConfirmationEmailService', () => {
     const updatedUser = await usersRepository.findById(user.id);
 
     expect(updatedToken.usedAt).not.toBeNull();
-    expect(updatedUser.confirmed_at).not.toBeNull();
+    expect(updatedUser.confirmedAt).not.toBeNull();
 
     expect(result).toMatchObject({
       statusCode: 200,

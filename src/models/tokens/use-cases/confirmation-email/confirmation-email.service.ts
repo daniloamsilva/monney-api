@@ -1,11 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { compareAsc } from 'date-fns';
 
-import { Providers } from '../../providers.enum';
 import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
 import { TokenType } from '@/entities/token/token.entity';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { ConfirmationEmailResponseDto } from './confirmation-email.response.dto';
+import { Providers } from '@/repositories/providers.enum';
 
 @Injectable()
 export class ConfirmationEmailService {
@@ -36,7 +36,7 @@ export class ConfirmationEmailService {
     await this.tokensRepository.save(token);
 
     const user = await this.usersRepository.findById(token.userId);
-    user.confirmed_at = confirmedAt;
+    user.confirmedAt = confirmedAt;
     await this.usersRepository.save(user);
 
     return {

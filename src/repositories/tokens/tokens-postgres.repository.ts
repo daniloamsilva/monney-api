@@ -5,6 +5,7 @@ import { add } from 'date-fns';
 import { Token } from '@/entities/token/token.entity';
 import { TokensRepositoryInterface } from './tokens.repository.interface';
 import { DatabaseService } from '@/infra/database/database.service';
+import { mapSnakeToCamel } from '@/utils/mapSnakeToCamel';
 
 export class TokensPostgresRepository implements TokensRepositoryInterface {
   constructor(
@@ -46,8 +47,8 @@ export class TokensPostgresRepository implements TokensRepositoryInterface {
       token.expiresAt = token.expiresAt ?? add(new Date(), { days: 7 });
 
       query = `
-        INSERT INTO tokens (user_id, token, type, expires_at, created_at, updated_at)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO tokens (user_id, token, type, used_at, expires_at, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *;
       `;
 
@@ -55,6 +56,7 @@ export class TokensPostgresRepository implements TokensRepositoryInterface {
         token.userId,
         token.token,
         token.type,
+        token.usedAt,
         token.expiresAt,
         token.createdAt,
         token.updatedAt,
@@ -62,7 +64,7 @@ export class TokensPostgresRepository implements TokensRepositoryInterface {
     }
 
     const rows = await this.database.query(query, values);
-    return new Token(rows[0]);
+    return new Token(mapSnakeToCamel(rows[0]));
   }
 
   async findByToken(token: string): Promise<Token> {
@@ -79,6 +81,6 @@ export class TokensPostgresRepository implements TokensRepositoryInterface {
       return null;
     }
 
-    return new Token(rows[0]);
+    return new Token(mapSnakeToCamel(rows[0]));
   }
 }

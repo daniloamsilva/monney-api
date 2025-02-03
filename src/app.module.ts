@@ -3,8 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 
 import { DatabaseModule } from './infra/database/database.module';
 import { QueuesModule } from './infra/queues/queues.module';
-import { UsersModule } from './models/users/users.module';
 import { MailerModuler } from './infra/mailer/mailer.module';
+
+import { UsersModule } from './models/users/users.module';
+import { TokensModule } from './models/tokens/tokens.module';
 
 @Module({
   imports: [
@@ -12,7 +14,9 @@ import { MailerModuler } from './infra/mailer/mailer.module';
     DatabaseModule,
     QueuesModule,
     MailerModuler,
+
     UsersModule,
+    TokensModule,
   ],
 })
 export class AppModule {}
