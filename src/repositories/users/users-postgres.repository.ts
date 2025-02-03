@@ -5,6 +5,7 @@ import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from './users.repository.interface';
 import { DatabaseService } from '@/infra/database/database.service';
 import { Encryption } from '@/utils/encryption';
+import { mapSnakeToCamel } from '@/utils/mapSnakeToCamel';
 
 export class UsersPostgresRepository implements UsersRepositoryInterface {
   constructor(
@@ -25,8 +26,9 @@ export class UsersPostgresRepository implements UsersRepositoryInterface {
           name = $1,
           email = $2,
           password = $3,
-          updated_at = $4
-        WHERE id = $5
+          confirmed_at = $4,
+          updated_at = $5
+        WHERE id = $6
         RETURNING *; 
       `;
 
@@ -34,6 +36,7 @@ export class UsersPostgresRepository implements UsersRepositoryInterface {
         user.name,
         user.email,
         user.password,
+        user.confirmedAt,
         user.updatedAt,
         findUser.id,
       ];
@@ -58,7 +61,24 @@ export class UsersPostgresRepository implements UsersRepositoryInterface {
     }
 
     const rows = await this.database.query(query, values);
-    return new User(rows[0]);
+    return new User(mapSnakeToCamel(rows[0]));
+  }
+
+  async findById(id: string): Promise<User | undefined> {
+    const rows = await this.database.query(
+      `
+        SELECT * FROM users 
+        WHERE id = $1
+        AND deleted_at IS NULL;
+      `,
+      [id],
+    );
+
+    if (!rows.length) {
+      return undefined;
+    }
+
+    return new User(mapSnakeToCamel(rows[0]));
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
@@ -75,6 +95,6 @@ export class UsersPostgresRepository implements UsersRepositoryInterface {
       return undefined;
     }
 
-    return new User(rows[0]);
+    return new User(mapSnakeToCamel(rows[0]));
   }
 }

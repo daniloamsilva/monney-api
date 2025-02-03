@@ -6,10 +6,10 @@ import { CreateUserRequestDto } from './create-user.request.dto';
 import { CreateUserResponseDto } from './create-user.response.dto';
 import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
-import { Providers } from '../../providers.enum';
 import { Queues } from '@/infra/queues/queues.enum';
 import { Token, TokenType } from '@/entities/token/token.entity';
 import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
+import { Providers } from '@/repositories/providers.enum';
 
 @Injectable()
 export class CreateUserService {

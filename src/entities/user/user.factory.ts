@@ -22,6 +22,7 @@ export class UserFactory {
           name,
           email,
           password: faker.internet.password(),
+          confirmedAt: null,
           createdAt,
           updatedAt: createdAt,
           deletedAt: null,

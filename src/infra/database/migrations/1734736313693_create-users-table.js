@@ -5,6 +5,7 @@ exports.up = (pgm) => {
       name TEXT NOT NULL,
       email TEXT NOT NULL,
       password TEXT NOT NULL,
+      confirmed_at TIMESTAMP,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       deleted_at TIMESTAMP

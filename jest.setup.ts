@@ -31,12 +31,12 @@ afterAll(async () => {
       SELECT table_name
       FROM information_schema.tables
       WHERE table_schema = 'public'
-      AND table_type = 'BASE TABLE'
-      AND table_name != 'migrations';  
+      AND table_type = 'BASE TABLE'; 
     `);
 
     for (const table of tables) {
       await database.query(`TRUNCATE TABLE ${table.table_name} CASCADE`);
+      await database.query(`DROP TABLE IF EXISTS ${table.table_name} CASCADE;`);
     }
 
     await database.onModuleDestroy();

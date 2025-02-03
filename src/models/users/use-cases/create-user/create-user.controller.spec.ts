@@ -4,11 +4,11 @@ import { Test } from '@nestjs/testing';
 
 import { AppModule } from '@/app.module';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
-import { Providers } from '../../providers.enum';
 import { UserFactory } from '@/entities/user/user.factory';
 import { DatabaseService } from '@/infra/database/database.service';
 import { QueuesModule } from '@/infra/queues/queues.module';
 import { QueuesTestModule } from '@/infra/queues/queues-test.module';
+import { Providers } from '@/repositories/providers.enum';
 
 describe('CreateUserController', () => {
   let app: INestApplication;

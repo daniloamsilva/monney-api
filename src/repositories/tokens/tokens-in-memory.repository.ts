@@ -9,11 +9,18 @@ export class TokensInMemoryRepository implements TokensRepositoryInterface {
   private id = 0;
 
   async save(token: Token): Promise<Token> {
-    token.id = this.id + 1;
-    token.token = uuid();
-    token.expiresAt = add(new Date(), { days: 7 });
+    if (token.id) {
+      const index = this.tokens.findIndex((t) => t.id === token.id);
+      this.tokens[index] = token;
+    } else {
+      token.id = this.id + 1;
+      token.token = uuid();
+      token.expiresAt = token.expiresAt ?? add(new Date(), { days: 7 });
 
-    this.id++;
+      this.tokens.push(token);
+      this.id++;
+    }
+
     return token;
   }
 

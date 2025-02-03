@@ -8,11 +8,20 @@ export class UsersInMemoryRepository implements UsersRepositoryInterface {
   private users = [];
 
   async save(user: User): Promise<User> {
-    user.id = uuid();
-    user.password = await Encryption.hash(user.password);
+    if (user.id) {
+      const index = this.users.findIndex((u) => u.id === user.id);
+      this.users[index] = user;
+    } else {
+      user.id = uuid();
+      user.password = await Encryption.hash(user.password);
+      this.users.push(user);
+    }
 
-    this.users.push(user);
     return user;
+  }
+
+  async findById(id: string): Promise<User | undefined> {
+    return this.users.find((user) => user.id === id && !user.deletedAt);
   }
 
   async findByEmail(email: string): Promise<User | undefined> {

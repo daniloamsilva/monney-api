@@ -15,7 +15,7 @@
     "lint:fix": "eslint src/**/*.ts --fix",
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
+    "test:cov": "jest --coverage --runInBand",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "migration:create": "node-pg-migrate -m src/infra/database/migrations -t migrations create",
     "migration:up": "node-pg-migrate -m src/infra/database/migrations -t migrations up",
