@@ -1,3 +1,5 @@
+import { JwtService } from '@nestjs/jwt';
+
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { LoginService } from './login.service';
 import { UsersInMemoryRepository } from '@/repositories/users/users-in-memory.repository';
@@ -6,10 +8,12 @@ import { UserFactory } from '@/entities/user/user.factory';
 describe('LoginService', () => {
   let loginService: LoginService;
   let usersRepository: UsersRepositoryInterface;
+  let jwtService: JwtService;
 
   beforeEach(() => {
     usersRepository = new UsersInMemoryRepository();
-    loginService = new LoginService(usersRepository);
+    jwtService = new JwtService({ secret: 'secret' });
+    loginService = new LoginService(usersRepository, jwtService);
   });
 
   it('should not be able to login with non-existing user', async () => {
@@ -50,12 +54,7 @@ describe('LoginService', () => {
       statusCode: 200,
       message: 'User logged in successfully',
       data: {
-        accessToken: {
-          sub: user.id,
-          email: user.email,
-          exp: expect.any(Number),
-          iat: expect.any(Number),
-        },
+        accessToken: expect.any(String),
       },
     });
   });

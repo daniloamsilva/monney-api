@@ -1,4 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
 import { LoginRequestDto } from './login.request.dto';
 import { Providers } from '@/repositories/providers.enum';
@@ -11,6 +12,7 @@ export class LoginService {
   constructor(
     @Inject(Providers.USERS_REPOSITORY)
     private readonly usersRepository: UsersRepositoryInterface,
+    private readonly jwtService: JwtService,
   ) {}
 
   async execute(data: LoginRequestDto): Promise<LoginResponseDto> {
@@ -29,16 +31,13 @@ export class LoginService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
+    const payload = { sub: user.id, email: user.email };
+
     return {
       statusCode: 200,
       message: 'User logged in successfully',
       data: {
-        accessToken: {
-          sub: user.id,
-          email: user.email,
-          exp: 0,
-          iat: 0,
-        },
+        accessToken: await this.jwtService.signAsync(payload),
       },
     };
   }
