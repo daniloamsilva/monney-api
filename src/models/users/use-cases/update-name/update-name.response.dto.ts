@@ -1,4 +1,4 @@
-export type UpdateNameReponseDto = {
+export type UpdateNameResponseDto = {
   statusCode: number;
   message: string;
 };

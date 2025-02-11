@@ -1,10 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
-import { User } from '@/entities/user/user.entity';
 import { UpdateNameRequestDto } from './update-name.request.dto';
 import { Providers } from '@/repositories/providers.enum';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
-import { UpdateNameReponseDto } from './update-name.response';
+import { UpdateNameResponseDto } from './update-name.response.dto';
 
 @Injectable()
 export class UpdateNameService {
@@ -14,9 +13,15 @@ export class UpdateNameService {
   ) {}
 
   async execute(
-    user: User,
+    id: string,
     data: UpdateNameRequestDto,
-  ): Promise<UpdateNameReponseDto> {
+  ): Promise<UpdateNameResponseDto> {
+    const user = await this.usersRepository.findById(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     user.name = data.name;
     await this.usersRepository.save(user);
 

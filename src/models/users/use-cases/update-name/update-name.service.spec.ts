@@ -12,9 +12,17 @@ describe('UpdateNameService', () => {
     updateNameService = new UpdateNameService(usersRepository);
   });
 
+  it('should not be able to update user name if user does not exist', async () => {
+    await expect(
+      updateNameService.execute('non-existing-id', {
+        name: 'Updated Name',
+      }),
+    ).rejects.toThrow('User not found');
+  });
+
   it('should be able to update user name', async () => {
     let user = await usersRepository.save(UserFactory.create());
-    const result = await updateNameService.execute(user, {
+    const result = await updateNameService.execute(user.id, {
       name: 'Updated Name',
     });
     user = await usersRepository.findById(user.id);
