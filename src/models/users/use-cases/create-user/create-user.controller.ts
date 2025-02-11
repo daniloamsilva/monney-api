@@ -17,7 +17,9 @@ import { CreateUserService } from './create-user.service';
 import { CreateUserRequestDto } from './create-user.request.dto';
 import { CreateUserResponseDto } from './create-user.response.dto';
 import { DatabaseTransactionInterceptor } from '@/interceptors/database-transaction.interceptor';
+import { Public } from '@/decorators/public-route.decorator';
 
+@Public()
 @ApiTags('Users')
 @Controller('users')
 @UseInterceptors(DatabaseTransactionInterceptor)

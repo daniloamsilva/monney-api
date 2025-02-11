@@ -9,7 +9,9 @@ import {
 import { LoginService } from './login.service';
 import { LoginRequestDto } from './login.request.dto';
 import { LoginResponseDto } from './login.response.dto';
+import { Public } from '@/decorators/public-route.decorator';
 
+@Public()
 @ApiTags('Auth')
 @Controller('auth')
 export class LoginController {
