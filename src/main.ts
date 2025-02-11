@@ -15,6 +15,7 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('MonneyAPI')
     .setVersion('1.0')
     .build();
