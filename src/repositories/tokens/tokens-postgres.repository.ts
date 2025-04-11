@@ -2,7 +2,7 @@ import { Inject } from '@nestjs/common';
 import { v7 as uuid } from 'uuid';
 import { add } from 'date-fns';
 
-import { Token } from '@/entities/token/token.entity';
+import { Token, TokenType } from '@/entities/token/token.entity';
 import { TokensRepositoryInterface } from './tokens.repository.interface';
 import { DatabaseService } from '@/infra/database/database.service';
 import { mapSnakeToCamel } from '@/utils/mapSnakeToCamel';
@@ -82,5 +82,23 @@ export class TokensPostgresRepository implements TokensRepositoryInterface {
     }
 
     return new Token(mapSnakeToCamel(rows[0]));
+  }
+
+  async findValidTokensByUserIdAndType(
+    userId: string,
+    type: TokenType,
+  ): Promise<Token[]> {
+    const rows = await this.database.query(
+      `
+        SELECT * FROM tokens
+        WHERE user_id = $1
+        AND type = $2
+        AND expires_at > NOW()
+        AND deleted_at IS NULL;
+      `,
+      [userId, type],
+    );
+
+    return rows.map((row) => new Token(mapSnakeToCamel(row)));
   }
 }

@@ -6,24 +6,32 @@ import { UsersInMemoryRepository } from '@/repositories/users/users-in-memory.re
 import { UserFactory } from '@/entities/user/user.factory';
 import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
 import { TokensInMemoryRepository } from '@/repositories/tokens/tokens-in-memory.repository';
+import { SendEmailService } from '@/models/tokens/use-cases/send-email/send-email.service';
 
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
   let usersRepository: UsersRepositoryInterface;
   let tokensRepository: TokensRepositoryInterface;
   let confirmationEmailQueue: Queue;
+  let sendEmailService: SendEmailService;
 
   beforeEach(() => {
     usersRepository = new UsersInMemoryRepository();
     tokensRepository = new TokensInMemoryRepository();
+
     confirmationEmailQueue = {
       add: jest.fn(),
     } as unknown as Queue;
 
-    createUserService = new CreateUserService(
+    sendEmailService = new SendEmailService(
       usersRepository,
       tokensRepository,
       confirmationEmailQueue,
+    );
+
+    createUserService = new CreateUserService(
+      usersRepository,
+      sendEmailService,
     );
   });
 
