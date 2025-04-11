@@ -38,8 +38,7 @@ describe('ResendEmailService', () => {
       }),
     );
 
-    const result = await resendEmailService.execute({
-      userId: user.id,
+    const result = await resendEmailService.execute(user.id, {
       tokenType: TokenType.CONFIRMATION_EMAIL,
     });
 

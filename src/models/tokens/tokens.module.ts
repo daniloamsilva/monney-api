@@ -6,13 +6,16 @@ import { TokensPostgresRepository } from '@/repositories/tokens/tokens-postgres.
 import { Providers } from '@/repositories/providers.enum';
 import { UsersPostgresRepository } from '@/repositories/users/users-postgres.repository';
 import { SendEmailService } from './use-cases/send-email/send-email.service';
+import { ResendEmailController } from './use-cases/resend-email/resend-email.controller';
+import { ResendEmailService } from './use-cases/resend-email/resend-email.service';
 
 @Global()
 @Module({
-  controllers: [ConfirmationEmailController],
+  controllers: [ConfirmationEmailController, ResendEmailController],
   providers: [
     SendEmailService,
     ConfirmationEmailService,
+    ResendEmailService,
     {
       provide: Providers.USERS_REPOSITORY,
       useClass: UsersPostgresRepository,

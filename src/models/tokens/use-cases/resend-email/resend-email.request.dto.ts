@@ -1,6 +1,8 @@
+import { IsEnum } from 'class-validator';
+
 import { TokenType } from '@/entities/token/token.entity';
 
 export class ResendEmailRequestDto {
-  userId: string;
+  @IsEnum(TokenType, { message: 'Invalid token type' })
   tokenType: TokenType;
 }

@@ -14,10 +14,13 @@ export class ResendEmailService {
     private readonly sendEmailService: SendEmailService,
   ) {}
 
-  async execute(data: ResendEmailRequestDto): Promise<ResendEmailResponseDto> {
+  async execute(
+    userId: string,
+    data: ResendEmailRequestDto,
+  ): Promise<ResendEmailResponseDto> {
     const oldTokens =
       await this.tokensRepository.findValidTokensByUserIdAndType(
-        data.userId,
+        userId,
         data.tokenType,
       );
 
@@ -30,7 +33,10 @@ export class ResendEmailService {
       );
     }
 
-    await this.sendEmailService.execute(data);
+    await this.sendEmailService.execute({
+      userId,
+      tokenType: data.tokenType,
+    });
 
     return {
       statusCode: 200,
