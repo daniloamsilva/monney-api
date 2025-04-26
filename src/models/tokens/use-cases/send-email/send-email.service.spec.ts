@@ -31,7 +31,7 @@ describe('SendEmailService', () => {
     ).rejects.toThrow('User not found');
   });
 
-  it.only('should be able to send an email successfully', async () => {
+  it('should be able to send an email successfully', async () => {
     const user = await usersRepository.save(UserFactory.create());
 
     await sendEmailService.execute({
@@ -43,8 +43,6 @@ describe('SendEmailService', () => {
       user.id,
       TokenType.CONFIRMATION_EMAIL,
     );
-
-    console.log('validTokens', validTokens);
 
     expect(validTokens).toHaveLength(1);
     expect(validTokens[0].userId).toBe(user.id);
