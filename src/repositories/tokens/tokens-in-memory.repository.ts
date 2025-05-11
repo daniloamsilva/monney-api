@@ -1,7 +1,7 @@
 import { v7 as uuid } from 'uuid';
 import { add } from 'date-fns';
 
-import { Token } from '@/entities/token/token.entity';
+import { Token, TokenType } from '@/entities/token/token.entity';
 import { TokensRepositoryInterface } from './tokens.repository.interface';
 
 export class TokensInMemoryRepository implements TokensRepositoryInterface {
@@ -26,5 +26,18 @@ export class TokensInMemoryRepository implements TokensRepositoryInterface {
 
   async findByToken(token: string): Promise<Token | undefined> {
     return this.tokens.find((t) => t.token === token && !t.deletedAt);
+  }
+
+  async findValidTokensByUserIdAndType(
+    userId: string,
+    type: TokenType,
+  ): Promise<Token[]> {
+    return this.tokens.filter(
+      (t) =>
+        t.userId === userId &&
+        t.type === type &&
+        t.expiresAt > new Date() &&
+        !t.deletedAt,
+    );
   }
 }
