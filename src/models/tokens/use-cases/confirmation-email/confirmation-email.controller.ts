@@ -11,6 +11,7 @@ import { DatabaseTransactionInterceptor } from '@/interceptors/database-transact
 import {
   BadRequestException,
   Controller,
+  HttpStatus,
   Param,
   Patch,
   UseInterceptors,
@@ -31,14 +32,14 @@ export class ConfirmationEmailController {
   @ApiOkResponse({
     description: 'Email confirmed successfully',
     example: {
-      statusCode: 200,
+      statusCode: HttpStatus.OK,
       message: 'Email confirmed successfully',
     },
   })
   @ApiBadRequestResponse({
     description: 'Invalid token format',
     example: {
-      statusCode: 400,
+      statusCode: HttpStatus.BAD_REQUEST,
       message: 'Invalid token format',
       error: 'Bad Request',
     },
@@ -46,7 +47,7 @@ export class ConfirmationEmailController {
   @ApiNotFoundResponse({
     description: 'Token not found',
     example: {
-      statusCode: 404,
+      statusCode: HttpStatus.NOT_FOUND,
       message: 'Token not found',
       error: 'Not Found',
     },

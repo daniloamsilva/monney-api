@@ -1,5 +1,5 @@
 import * as request from 'supertest';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
 import { AppModule } from '@/app.module';
@@ -64,7 +64,7 @@ describe('ResendEmailController', () => {
         tokenType: TokenType.CONFIRMATION_EMAIL,
       });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
   });
 
   it('should not be able to resend an email with an invalid token type', async () => {
@@ -75,9 +75,9 @@ describe('ResendEmailController', () => {
         tokenType: 'invalid_token_type',
       });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
     expect(response.body).toEqual({
-      statusCode: 400,
+      statusCode: HttpStatus.BAD_REQUEST,
       message: ['Invalid token type'],
       error: 'Bad Request',
     });
@@ -91,9 +91,9 @@ describe('ResendEmailController', () => {
         tokenType: TokenType.CONFIRMATION_EMAIL,
       });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.OK);
     expect(response.body).toEqual({
-      statusCode: 200,
+      statusCode: HttpStatus.OK,
       message: 'Email resent successfully',
     });
   });

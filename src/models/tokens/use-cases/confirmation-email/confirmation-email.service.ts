@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { compareAsc } from 'date-fns';
 
 import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
@@ -40,7 +45,7 @@ export class ConfirmationEmailService {
     await this.usersRepository.save(user);
 
     return {
-      statusCode: 200,
+      statusCode: HttpStatus.OK,
       message: 'Email confirmed successfully',
     };
   }

@@ -1,4 +1,9 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { LoginRequestDto } from './login.request.dto';
@@ -29,7 +34,7 @@ export class LoginService {
     const payload = { sub: user.id, email: user.email };
 
     return {
-      statusCode: 200,
+      statusCode: HttpStatus.OK,
       message: 'User logged in successfully',
       data: {
         accessToken: await this.jwtService.signAsync(payload),

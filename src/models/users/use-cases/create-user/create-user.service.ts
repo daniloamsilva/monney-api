@@ -1,4 +1,9 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 
 import { CreateUserRequestDto } from './create-user.request.dto';
 import { CreateUserResponseDto } from './create-user.response.dto';
@@ -39,7 +44,7 @@ export class CreateUserService {
     });
 
     return {
-      statusCode: 201,
+      statusCode: HttpStatus.CREATED,
       message: 'User created successfully',
     };
   }

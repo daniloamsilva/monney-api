@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 import { Providers } from '@/repositories/providers.enum';
 import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
@@ -39,7 +39,7 @@ export class ResendEmailService {
     });
 
     return {
-      statusCode: 200,
+      statusCode: HttpStatus.OK,
       message: 'Email resent successfully',
     };
   }

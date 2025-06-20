@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  HttpStatus,
 } from '@nestjs/common';
 
 import { Providers } from '@/repositories/providers.enum';
@@ -36,7 +37,7 @@ export class UpdatePasswordService {
     await this.usersRepository.save(user);
 
     return {
-      statusCode: 200,
+      statusCode: HttpStatus.OK,
       message: 'User password updated successfully',
     };
   }

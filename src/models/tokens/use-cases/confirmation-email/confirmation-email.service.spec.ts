@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common';
+
 import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
 import { ConfirmationEmailService } from './confirmation-email.service';
 import { TokensInMemoryRepository } from '@/repositories/tokens/tokens-in-memory.repository';
@@ -81,7 +83,7 @@ describe('ConfirmationEmailService', () => {
     expect(updatedUser.confirmedAt).not.toBeNull();
 
     expect(result).toMatchObject({
-      statusCode: 200,
+      statusCode: HttpStatus.OK,
       message: 'Email confirmed successfully',
     });
   });

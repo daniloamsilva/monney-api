@@ -1,5 +1,5 @@
 import * as request from 'supertest';
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
 import { AppModule } from '@/app.module';
@@ -44,7 +44,7 @@ describe('ConfirmationEmailController', () => {
       '/tokens/confirmation-email/a6691860-5000-42cd-9819-8701219a92d1',
     );
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(HttpStatus.NOT_FOUND);
     expect(response.body.message).toEqual('Token not found');
   });
 
@@ -58,7 +58,7 @@ describe('ConfirmationEmailController', () => {
       `/tokens/confirmation-email/${token.token}`,
     );
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(HttpStatus.NOT_FOUND);
     expect(response.body.message).toEqual('Token not found');
   });
 
@@ -67,7 +67,7 @@ describe('ConfirmationEmailController', () => {
       '/tokens/confirmation-email/invalid-uuid-format',
     );
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
     expect(response.body.message).toEqual('Invalid token format');
   });
 
@@ -84,7 +84,7 @@ describe('ConfirmationEmailController', () => {
       `/tokens/confirmation-email/${token.token}`,
     );
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(HttpStatus.NOT_FOUND);
     expect(response.body.message).toEqual('Token not found');
   });
 
@@ -102,7 +102,7 @@ describe('ConfirmationEmailController', () => {
       `/tokens/confirmation-email/${token.token}`,
     );
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(HttpStatus.NOT_FOUND);
     expect(response.body.message).toEqual('Token not found');
   });
 
@@ -125,7 +125,7 @@ describe('ConfirmationEmailController', () => {
     expect(updatedToken.usedAt).not.toBeNull();
     expect(updatedUser.confirmedAt).not.toBeUndefined();
     expect(updatedUser.confirmedAt).not.toBeNull();
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.OK);
     expect(response.body.message).toEqual('Email confirmed successfully');
   });
 });

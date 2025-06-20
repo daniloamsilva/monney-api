@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { UpdateNameRequestDto } from './update-name.request.dto';
 import { Providers } from '@/repositories/providers.enum';
@@ -26,7 +31,7 @@ export class UpdateNameService {
     await this.usersRepository.save(user);
 
     return {
-      statusCode: 200,
+      statusCode: HttpStatus.OK,
       message: 'User name updated successfully',
     };
   }
