@@ -44,6 +44,7 @@ export class CreateUserController {
         'password must be longer than or equal to 8 characters',
         'password must be a string',
         'passwordConfirmation must be a string',
+        "password and passwordConfirmation don't match",
       ],
       error: 'Bad Request',
     },

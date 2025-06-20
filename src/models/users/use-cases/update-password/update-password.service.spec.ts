@@ -23,6 +23,7 @@ describe('UpdatePasswordService', () => {
       updatePasswordService.execute('non-existing-id', {
         currentPassword,
         newPassword,
+        newPasswordConfirmation: newPassword,
       }),
     ).rejects.toThrow('User not found');
   });
@@ -38,6 +39,7 @@ describe('UpdatePasswordService', () => {
       updatePasswordService.execute(user.id, {
         currentPassword: wrongPassword,
         newPassword,
+        newPasswordConfirmation: newPassword,
       }),
     ).rejects.toThrow('Current password is incorrect');
   });
@@ -52,6 +54,7 @@ describe('UpdatePasswordService', () => {
     const result = await updatePasswordService.execute(user.id, {
       currentPassword,
       newPassword,
+      newPasswordConfirmation: newPassword,
     });
 
     expect(await user.checkPassword(newPassword)).toBe(true);

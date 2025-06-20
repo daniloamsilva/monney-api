@@ -62,6 +62,7 @@ describe('UpdatePasswordController', () => {
       .send({
         currentPassword: 'oldPassword123',
         newPassword: 'newPassword123',
+        newPasswordConfirmation: 'newPassword123',
       });
 
     expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
@@ -74,10 +75,13 @@ describe('UpdatePasswordController', () => {
       .send({
         currentPassword: 'pass1234',
         newPassword: '',
+        newPasswordConfirmation: '',
       });
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-    expect(response.body.message).toContain('newPassword should not be empty');
+    expect(response.body.message).toContain(
+      'newPassword must be longer than or equal to 8 characters',
+    );
   });
 
   it('should not able to update password if current password is incorrect', async () => {
@@ -87,10 +91,26 @@ describe('UpdatePasswordController', () => {
       .send({
         currentPassword: 'wrongPassword',
         newPassword: 'newPassword123',
+        newPasswordConfirmation: 'newPassword123',
       });
 
     expect(response.status).toBe(HttpStatus.FORBIDDEN);
     expect(response.body.message).toContain('Current password is incorrect');
+  });
+
+  it('should not able to update password if new password confirmation does not match', async () => {
+    const response = await request(app.getHttpServer())
+      .patch('/users/password')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        currentPassword: 'pass1234',
+        newPassword: 'newPassword123',
+        newPasswordConfirmation: 'differentPassword123',
+      });
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    expect(response.body.message).toContain(
+      "newPassword and newPasswordConfirmation don't match",
+    );
   });
 
   it('should be able to update user password', async () => {
@@ -100,6 +120,7 @@ describe('UpdatePasswordController', () => {
       .send({
         currentPassword: 'pass1234',
         newPassword: 'newPassword123',
+        newPasswordConfirmation: 'newPassword123',
       });
 
     expect(response.status).toBe(HttpStatus.OK);

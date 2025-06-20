@@ -1,5 +1,6 @@
 import { Body, Controller, HttpStatus, Patch } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -26,6 +27,20 @@ export class UpdatePasswordController {
     example: {
       statusCode: HttpStatus.OK,
       message: 'User password updated successfully',
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid request parameters',
+    example: {
+      statusCode: HttpStatus.BAD_REQUEST,
+      message: [
+        'currentPassword must be a string',
+        'newPassword must be longer than or equal to 8 characters',
+        'newPassword must be a string',
+        'newPasswordConfirmation must be a string',
+        "newPassword and newPasswordConfirmation don't match",
+      ],
+      error: 'Bad Request',
     },
   })
   @ApiUnauthorizedResponse({
