@@ -11,7 +11,7 @@ export class User {
   updatedAt: Date;
   deletedAt?: Date;
 
-  constructor(user: Omit<User, 'checkPassword' | 'updatePassword'>) {
+  constructor(user: Omit<User, 'checkPassword' | 'changePassword'>) {
     Object.assign(this, user);
   }
 
@@ -19,7 +19,7 @@ export class User {
     return Encryption.compare(password, this.password);
   }
 
-  async updatePassword(newPassword: string): Promise<void> {
+  async changePassword(newPassword: string): Promise<void> {
     this.password = await Encryption.hash(newPassword);
   }
 }

@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginRequestDto } from './login.request.dto';
 import { Providers } from '@/repositories/providers.enum';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
-import { Encryption } from '@/utils/encryption';
 import { LoginResponseDto } from './login.response.dto';
 
 @Injectable()
@@ -22,12 +21,8 @@ export class LoginService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const correctPassword = await Encryption.compare(
-      data.password,
-      user.password,
-    );
-
-    if (!correctPassword) {
+    const isCorrectPassword = await user.checkPassword(data.password);
+    if (!isCorrectPassword) {
       throw new UnauthorizedException('Invalid email or password');
     }
 

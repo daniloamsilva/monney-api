@@ -28,7 +28,7 @@ export class UpdatePasswordService {
       throw new ForbiddenException('Current password is incorrect');
     }
 
-    await user.updatePassword(data.newPassword);
+    await user.changePassword(data.newPassword);
     await this.usersRepository.save(user);
 
     return {

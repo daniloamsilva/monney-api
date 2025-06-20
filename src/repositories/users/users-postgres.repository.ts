@@ -4,7 +4,6 @@ import { v7 as uuid } from 'uuid';
 import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from './users.repository.interface';
 import { DatabaseService } from '@/infra/database/database.service';
-import { Encryption } from '@/utils/encryption';
 import { mapSnakeToCamel } from '@/utils/mapSnakeToCamel';
 
 export class UsersPostgresRepository implements UsersRepositoryInterface {
@@ -42,7 +41,7 @@ export class UsersPostgresRepository implements UsersRepositoryInterface {
       ];
     } else {
       user.id = uuid();
-      user.password = await Encryption.hash(user.password);
+      await user.changePassword(user.password);
 
       query = `
         INSERT INTO users (id, name, email, password, created_at, updated_at)
