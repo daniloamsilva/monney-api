@@ -1,4 +1,5 @@
 import { Queue } from 'bullmq';
+import { HttpStatus } from '@nestjs/common';
 
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { CreateUserService } from './create-user.service';
@@ -69,7 +70,7 @@ describe('CreateUserService', () => {
     expect(confirmationEmailQueue.add).toHaveBeenCalledTimes(1);
 
     expect(result).toMatchObject({
-      statusCode: 201,
+      statusCode: HttpStatus.CREATED,
       message: 'User created successfully',
     });
   });

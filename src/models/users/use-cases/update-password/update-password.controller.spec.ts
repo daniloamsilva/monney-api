@@ -6,16 +6,15 @@ import { AppModule } from '@/app.module';
 import { QueuesModule } from '@/infra/queues/queues.module';
 import { QueuesTestModule } from '@/infra/queues/queues-test.module';
 import { DatabaseService } from '@/infra/database/database.service';
-import { TokenType } from '@/entities/token/token.entity';
-import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
+import { User } from '@/entities/user/user.entity';
 import { Providers } from '@/repositories/providers.enum';
 import { UserFactory } from '@/entities/user/user.factory';
 
-describe('ResendEmailController', () => {
+describe('UpdatePasswordController', () => {
   let app: INestApplication;
-  let user: User;
   let usersRepository: UsersRepositoryInterface;
+  let user: User;
   let accessToken: string;
 
   beforeAll(async () => {
@@ -28,6 +27,8 @@ describe('ResendEmailController', () => {
       .useValue(new DatabaseService(true))
       .compile();
 
+    usersRepository = module.get(Providers.USERS_REPOSITORY);
+
     app = module.createNestApplication();
     app.useGlobalPipes(
       new ValidationPipe({
@@ -36,8 +37,6 @@ describe('ResendEmailController', () => {
       }),
     );
     await app.init();
-
-    usersRepository = module.get(Providers.USERS_REPOSITORY);
 
     user = await usersRepository.save(
       UserFactory.create({ password: 'pass1234' }),
@@ -57,44 +56,73 @@ describe('ResendEmailController', () => {
     await app.close();
   });
 
-  it('should not be able to resend an email without authentication', async () => {
+  it('should not able to update password without authentication', async () => {
     const response = await request(app.getHttpServer())
-      .post('/tokens/resend-email')
+      .patch('/users/password')
       .send({
-        tokenType: TokenType.CONFIRMATION_EMAIL,
+        currentPassword: 'oldPassword123',
+        newPassword: 'newPassword123',
+        newPasswordConfirmation: 'newPassword123',
       });
 
     expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
   });
 
-  it('should not be able to resend an email with an invalid token type', async () => {
+  it('should not able to update password with an empty new password', async () => {
     const response = await request(app.getHttpServer())
-      .post('/tokens/resend-email')
+      .patch('/users/password')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        tokenType: 'invalid_token_type',
+        currentPassword: 'pass1234',
+        newPassword: '',
+        newPasswordConfirmation: '',
       });
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-    expect(response.body).toEqual({
-      statusCode: HttpStatus.BAD_REQUEST,
-      message: ['Invalid token type'],
-      error: 'Bad Request',
-    });
+    expect(response.body.message).toContain(
+      'newPassword must be longer than or equal to 8 characters',
+    );
   });
 
-  it('should be able to resend an email with a new token successfully', async () => {
+  it('should not able to update password if current password is incorrect', async () => {
     const response = await request(app.getHttpServer())
-      .post('/tokens/resend-email')
+      .patch('/users/password')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        tokenType: TokenType.CONFIRMATION_EMAIL,
+        currentPassword: 'wrongPassword',
+        newPassword: 'newPassword123',
+        newPasswordConfirmation: 'newPassword123',
+      });
+
+    expect(response.status).toBe(HttpStatus.FORBIDDEN);
+    expect(response.body.message).toContain('Current password is incorrect');
+  });
+
+  it('should not able to update password if new password confirmation does not match', async () => {
+    const response = await request(app.getHttpServer())
+      .patch('/users/password')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        currentPassword: 'pass1234',
+        newPassword: 'newPassword123',
+        newPasswordConfirmation: 'differentPassword123',
+      });
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    expect(response.body.message).toContain(
+      "newPassword and newPasswordConfirmation don't match",
+    );
+  });
+
+  it('should be able to update user password', async () => {
+    const response = await request(app.getHttpServer())
+      .patch('/users/password')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        currentPassword: 'pass1234',
+        newPassword: 'newPassword123',
+        newPasswordConfirmation: 'newPassword123',
       });
 
     expect(response.status).toBe(HttpStatus.OK);
-    expect(response.body).toEqual({
-      statusCode: HttpStatus.OK,
-      message: 'Email resent successfully',
-    });
   });
 });

@@ -29,7 +29,7 @@ export class ResendEmailController {
   @ApiOkResponse({
     description: 'Email resent successfully',
     example: {
-      statusCode: 200,
+      statusCode: HttpStatus.OK,
       message: 'Email resent successfully',
     },
   })

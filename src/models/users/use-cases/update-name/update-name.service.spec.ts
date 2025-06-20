@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common';
+
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { UpdateNameService } from './update-name.service';
 import { UsersInMemoryRepository } from '@/repositories/users/users-in-memory.repository';
@@ -28,7 +30,7 @@ describe('UpdateNameService', () => {
     user = await usersRepository.findById(user.id);
 
     expect(user.name).toBe('Updated Name');
-    expect(result.statusCode).toBe(200);
+    expect(result.statusCode).toBe(HttpStatus.OK);
     expect(result.message).toBe('User name updated successfully');
   });
 });

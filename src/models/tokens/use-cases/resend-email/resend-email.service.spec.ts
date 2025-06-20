@@ -1,4 +1,5 @@
 import { Queue } from 'bullmq';
+import { HttpStatus } from '@nestjs/common';
 
 import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
 import { ResendEmailService } from './resend-email.service';
@@ -43,7 +44,7 @@ describe('ResendEmailService', () => {
     });
 
     expect(result).toMatchObject({
-      statusCode: 200,
+      statusCode: HttpStatus.OK,
       message: 'Email resent successfully',
     });
   });

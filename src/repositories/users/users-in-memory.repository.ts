@@ -2,7 +2,6 @@ import { v7 as uuid } from 'uuid';
 
 import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from './users.repository.interface';
-import { Encryption } from '@/utils/encryption';
 
 export class UsersInMemoryRepository implements UsersRepositoryInterface {
   private users = [];
@@ -13,7 +12,7 @@ export class UsersInMemoryRepository implements UsersRepositoryInterface {
       this.users[index] = user;
     } else {
       user.id = uuid();
-      user.password = await Encryption.hash(user.password);
+      await user.changePassword(user.password);
       this.users.push(user);
     }
 

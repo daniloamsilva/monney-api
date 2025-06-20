@@ -1,4 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
+import { HttpStatus } from '@nestjs/common';
 
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { LoginService } from './login.service';
@@ -51,7 +52,7 @@ describe('LoginService', () => {
     });
 
     expect(result).toMatchObject({
-      statusCode: 200,
+      statusCode: HttpStatus.OK,
       message: 'User logged in successfully',
       data: {
         accessToken: expect.any(String),

@@ -1,5 +1,5 @@
 import * as request from 'supertest';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
 import { AppModule } from '@/app.module';
@@ -48,7 +48,7 @@ describe('LoginController', () => {
         password: 'password',
       });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
     expect(response.body.message).toEqual(['email must be an email']);
   });
 
@@ -60,7 +60,7 @@ describe('LoginController', () => {
         password: 'invalid_password',
       });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     expect(response.body.message).toEqual('Invalid email or password');
   });
 
@@ -77,7 +77,7 @@ describe('LoginController', () => {
         password: 'invalid_password',
       });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     expect(response.body.message).toEqual('Invalid email or password');
   });
 
@@ -94,7 +94,7 @@ describe('LoginController', () => {
         password: userPassword,
       });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.OK);
     expect(response.body.message).toEqual('User logged in successfully');
     expect(response.body.data.accessToken).toBeDefined();
   });

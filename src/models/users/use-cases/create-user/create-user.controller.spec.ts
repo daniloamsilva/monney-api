@@ -1,5 +1,5 @@
 import * as request from 'supertest';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
 import { AppModule } from '@/app.module';
@@ -48,7 +48,7 @@ describe('CreateUserController', () => {
       passwordConfirmation: 'pass1234',
     });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
     expect(response.body.message).toEqual(['email must be an email']);
   });
 
@@ -60,7 +60,7 @@ describe('CreateUserController', () => {
       passwordConfirmation: 'pass',
     });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
     expect(response.body.message).toEqual([
       'password must be longer than or equal to 8 characters',
     ]);
@@ -74,7 +74,7 @@ describe('CreateUserController', () => {
       passwordConfirmation: 'different-pass',
     });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
     expect(response.body.message).toEqual([
       "password and passwordConfirmation don't match",
     ]);
@@ -90,7 +90,7 @@ describe('CreateUserController', () => {
       passwordConfirmation: 'pass1234',
     });
 
-    expect(response.status).toBe(409);
+    expect(response.status).toBe(HttpStatus.CONFLICT);
   });
 
   it('should be able to create a new user successfully', async () => {
@@ -101,6 +101,6 @@ describe('CreateUserController', () => {
       passwordConfirmation: 'pass1234',
     });
 
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(HttpStatus.CREATED);
   });
 });

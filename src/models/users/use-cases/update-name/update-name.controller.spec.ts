@@ -1,5 +1,5 @@
 import * as request from 'supertest';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
@@ -63,7 +63,7 @@ describe('UpdateNameController', () => {
         name: 'Updated Name',
       });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
   });
 
   it('should not able to update user name with an empty name', async () => {
@@ -74,7 +74,7 @@ describe('UpdateNameController', () => {
         name: '',
       });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
   });
 
   it('should be able to update user name', async () => {
@@ -87,7 +87,7 @@ describe('UpdateNameController', () => {
 
     const updatedUser = await usersRepository.findById(user.id);
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(HttpStatus.OK);
     expect(updatedUser.name).toBe('Updated Name');
   });
 });
