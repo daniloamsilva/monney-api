@@ -8,6 +8,7 @@ import {
 import { Providers } from '@/repositories/providers.enum';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { UpdatePasswordRequestDto } from './update-password.request.dto';
+import { UpdatePasswordResponseDto } from './update-password.response.dto';
 
 @Injectable()
 export class UpdatePasswordService {
@@ -16,7 +17,10 @@ export class UpdatePasswordService {
     private readonly usersRepository: UsersRepositoryInterface,
   ) {}
 
-  async execute(id: string, data: UpdatePasswordRequestDto) {
+  async execute(
+    id: string,
+    data: UpdatePasswordRequestDto,
+  ): Promise<UpdatePasswordResponseDto> {
     const user = await this.usersRepository.findById(id);
 
     if (!user) {
