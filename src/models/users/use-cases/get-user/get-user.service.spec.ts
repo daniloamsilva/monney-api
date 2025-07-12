@@ -4,7 +4,7 @@ import { UsersInMemoryRepository } from '@/repositories/users/users-in-memory.re
 import { GetUserService } from './get-user.service';
 import { UserFactory } from '@/entities/user/user.factory';
 
-describe('GetuUserService', () => {
+describe('GetUserService', () => {
   let getUserService: GetUserService;
   let usersRepository: UsersInMemoryRepository;
 
