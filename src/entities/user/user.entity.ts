@@ -21,7 +21,7 @@ export class User {
     return safeProps;
   }
 
-  get id(): string {
+  get id(): string | undefined {
     return this.props.id;
   }
 
