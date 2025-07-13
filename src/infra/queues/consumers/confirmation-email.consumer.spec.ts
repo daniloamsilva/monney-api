@@ -1,26 +1,47 @@
+import { Job } from 'bullmq';
+
 import { MailerService } from '@/infra/mailer/mailer.service';
 import { ConfirmationEmailConsumer } from './confirmation-email.consumer';
 import { UserFactory } from '@/entities/user/user.factory';
-import { TokenFactory } from '@/entities/token/token.factory';
-import { Job } from 'bullmq';
+import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
+import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
+import { UsersInMemoryRepository } from '@/repositories/users/users-in-memory.repository';
+import { TokensInMemoryRepository } from '@/repositories/tokens/tokens-in-memory.repository';
+import { TokenType } from '@/entities/token/token.entity';
 
 describe('ConfirmationEmailConsumer', () => {
   let confirmationEmailConsumer: ConfirmationEmailConsumer;
   let mailerService: MailerService;
+  let usersRepository: UsersRepositoryInterface;
+  let tokensRepository: TokensRepositoryInterface;
 
   beforeEach(() => {
+    usersRepository = new UsersInMemoryRepository();
+    tokensRepository = new TokensInMemoryRepository();
+
     mailerService = {
       sendMail: jest.fn(),
     } as unknown as MailerService;
-    confirmationEmailConsumer = new ConfirmationEmailConsumer(mailerService);
+
+    confirmationEmailConsumer = new ConfirmationEmailConsumer(
+      mailerService,
+      usersRepository,
+      tokensRepository,
+    );
   });
 
   it('should be able to send a confirmation email', async () => {
-    const user = UserFactory.create();
-    const token = TokenFactory.create({ userId: user.id });
-    const job = { data: { user, token } };
+    const user = await usersRepository.save(UserFactory.create());
+    const job = { data: { userId: user.id } };
 
     await confirmationEmailConsumer.process(job as Job);
+
+    const validTokens = await tokensRepository.findValidTokensByUserIdAndType(
+      user.id,
+      TokenType.CONFIRMATION_EMAIL,
+    );
+
+    const token = validTokens[0];
 
     expect(mailerService.sendMail).toHaveBeenCalledWith({
       recipients: [{ address: user.email, name: user.name }],

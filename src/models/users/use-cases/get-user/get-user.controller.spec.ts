@@ -51,14 +51,14 @@ describe('GetUserController', () => {
   });
 
   it('should not be able to get user details without authentication', async () => {
-    const response = await request(app.getHttpServer()).get('/users');
+    const response = await request(app.getHttpServer()).get('/users/me');
 
     expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
   });
 
   it('should be able to get logged user details', async () => {
     const response = await request(app.getHttpServer())
-      .get('/users')
+      .get('/users/me')
       .set('Authorization', `Bearer ${accessToken}`);
 
     expect(response.status).toBe(HttpStatus.OK);

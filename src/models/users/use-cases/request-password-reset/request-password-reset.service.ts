@@ -7,15 +7,15 @@ import {
 
 import { Providers } from '@/repositories/providers.enum';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
-import { SendEmailService } from '@/models/tokens/use-cases/send-email/send-email.service';
-import { TokenType } from '@/entities/token/token.entity';
+import { QueuesService } from '@/infra/queues/queues.service';
+import { QueueType } from '@/infra/queues/queues.enum';
 
 @Injectable()
 export class RequestPasswordResetService {
   constructor(
     @Inject(Providers.USERS_REPOSITORY)
     private readonly usersRepository: UsersRepositoryInterface,
-    private readonly sendEmailService: SendEmailService,
+    private readonly queuesService: QueuesService,
   ) {}
 
   async execute(email: string) {
@@ -25,9 +25,9 @@ export class RequestPasswordResetService {
       throw new NotFoundException('User not found');
     }
 
-    await this.sendEmailService.execute({
+    await this.queuesService.execute({
       userId: user.id,
-      tokenType: TokenType.PASSWORD_RESET,
+      queueType: QueueType.PASSWORD_RESET_EMAIL,
     });
 
     return {

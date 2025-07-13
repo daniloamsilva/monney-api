@@ -1,39 +1,27 @@
-import { Queue } from 'bullmq';
 import { HttpStatus } from '@nestjs/common';
+import { Queue } from 'bullmq';
 
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { CreateUserService } from './create-user.service';
 import { UsersInMemoryRepository } from '@/repositories/users/users-in-memory.repository';
 import { UserFactory } from '@/entities/user/user.factory';
-import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
-import { TokensInMemoryRepository } from '@/repositories/tokens/tokens-in-memory.repository';
-import { SendEmailService } from '@/models/tokens/use-cases/send-email/send-email.service';
+import { QueuesService } from '@/infra/queues/queues.service';
 
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
+  let queuesService: QueuesService;
   let usersRepository: UsersRepositoryInterface;
-  let tokensRepository: TokensRepositoryInterface;
   let confirmationEmailQueue: Queue;
-  let sendEmailService: SendEmailService;
 
   beforeEach(() => {
     usersRepository = new UsersInMemoryRepository();
-    tokensRepository = new TokensInMemoryRepository();
 
     confirmationEmailQueue = {
       add: jest.fn(),
     } as unknown as Queue;
 
-    sendEmailService = new SendEmailService(
-      usersRepository,
-      tokensRepository,
-      confirmationEmailQueue,
-    );
-
-    createUserService = new CreateUserService(
-      usersRepository,
-      sendEmailService,
-    );
+    queuesService = new QueuesService(confirmationEmailQueue, {} as Queue);
+    createUserService = new CreateUserService(usersRepository, queuesService);
   });
 
   it('should not be able to create a new user with the an email already used', async () => {

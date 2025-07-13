@@ -9,16 +9,16 @@ import { CreateUserRequestDto } from './create-user.request.dto';
 import { CreateUserResponseDto } from './create-user.response.dto';
 import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
-import { TokenType } from '@/entities/token/token.entity';
 import { Providers } from '@/repositories/providers.enum';
-import { SendEmailService } from '@/models/tokens/use-cases/send-email/send-email.service';
+import { QueuesService } from '@/infra/queues/queues.service';
+import { QueueType } from '@/infra/queues/queues.enum';
 
 @Injectable()
 export class CreateUserService {
   constructor(
     @Inject(Providers.USERS_REPOSITORY)
     private readonly usersRepository: UsersRepositoryInterface,
-    private readonly sendEmailService: SendEmailService,
+    private readonly queuesService: QueuesService,
   ) {}
 
   async execute(data: CreateUserRequestDto): Promise<CreateUserResponseDto> {
@@ -38,9 +38,9 @@ export class CreateUserService {
     });
     await this.usersRepository.save(user);
 
-    await this.sendEmailService.execute({
+    await this.queuesService.execute({
       userId: user.id,
-      tokenType: TokenType.CONFIRMATION_EMAIL,
+      queueType: QueueType.CONFIRMATION_EMAIL,
     });
 
     return {
