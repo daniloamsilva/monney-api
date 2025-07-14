@@ -1,9 +1,9 @@
 import { Job } from 'bullmq';
+import { Inject, Logger } from '@nestjs/common';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 
 import { QueueType } from '../queues.enum';
 import { MailerService } from '@/infra/mailer/mailer.service';
-import { Inject } from '@nestjs/common';
 import { Providers } from '@/repositories/providers.enum';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
@@ -45,7 +45,11 @@ export class RequestPasswordResetConsumer extends WorkerHost {
         },
       });
     } catch (error) {
-      console.log('Error sending password reset email:', error);
+      Logger.error(
+        'Error sending password reset email:',
+        error,
+        RequestPasswordResetConsumer.name,
+      );
     }
   }
 }

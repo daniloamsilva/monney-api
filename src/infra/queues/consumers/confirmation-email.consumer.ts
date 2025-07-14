@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 
@@ -44,7 +44,11 @@ export class ConfirmationEmailConsumer extends WorkerHost {
         },
       });
     } catch (error) {
-      console.log('Error sending confirmation email:', error);
+      Logger.error(
+        'Error sending confirmation email:',
+        error,
+        ConfirmationEmailConsumer.name,
+      );
     }
   }
 }
