@@ -7,6 +7,7 @@ import { QueuesService } from './queues.service';
 import { Providers } from '@/repositories/providers.enum';
 import { UsersPostgresRepository } from '@/repositories/users/users-postgres.repository';
 import { TokensPostgresRepository } from '@/repositories/tokens/tokens-postgres.repository';
+import { RequestPasswordResetConsumer } from './consumers/request-password-reset.consumer';
 
 @Global()
 @Module({
@@ -27,6 +28,7 @@ import { TokensPostgresRepository } from '@/repositories/tokens/tokens-postgres.
   providers: [
     QueuesService,
     ConfirmationEmailConsumer,
+    RequestPasswordResetConsumer,
     {
       provide: Providers.USERS_REPOSITORY,
       useClass: UsersPostgresRepository,
