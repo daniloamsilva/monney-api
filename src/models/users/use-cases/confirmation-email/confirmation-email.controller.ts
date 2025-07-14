@@ -20,8 +20,8 @@ import { ConfirmationEmailService } from './confirmation-email.service';
 import { Public } from '@/decorators/public-route.decorator';
 
 @Public()
-@ApiTags('Tokens')
-@Controller('tokens')
+@ApiTags('Users')
+@Controller('users')
 @UseInterceptors(DatabaseTransactionInterceptor)
 export class ConfirmationEmailController {
   constructor(

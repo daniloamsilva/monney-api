@@ -9,7 +9,6 @@ import { AuthGuard } from './guards/auth.guard';
 
 import { AuthModule } from './models/auth/auth.module';
 import { UsersModule } from './models/users/users.module';
-import { TokensModule } from './models/tokens/tokens.module';
 
 @Module({
   imports: [
@@ -20,7 +19,6 @@ import { TokensModule } from './models/tokens/tokens.module';
 
     AuthModule,
     UsersModule,
-    TokensModule,
   ],
   providers: [
     {

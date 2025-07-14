@@ -48,7 +48,7 @@ export class GetUserController {
       message: 'User not found',
     },
   })
-  @Get()
+  @Get('me')
   async handle(@Payload('sub') id: string) {
     return this.getUserService.execute(id);
   }

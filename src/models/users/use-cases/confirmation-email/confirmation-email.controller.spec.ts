@@ -41,7 +41,7 @@ describe('ConfirmationEmailController', () => {
 
   it('should not be able to use a non existing token', async () => {
     const response = await request(app.getHttpServer()).patch(
-      '/tokens/confirmation-email/a6691860-5000-42cd-9819-8701219a92d1',
+      '/users/confirmation-email/a6691860-5000-42cd-9819-8701219a92d1',
     );
 
     expect(response.status).toBe(HttpStatus.NOT_FOUND);
@@ -55,7 +55,7 @@ describe('ConfirmationEmailController', () => {
     );
 
     const response = await request(app.getHttpServer()).patch(
-      `/tokens/confirmation-email/${token.token}`,
+      `/users/confirmation-email/${token.token}`,
     );
 
     expect(response.status).toBe(HttpStatus.NOT_FOUND);
@@ -64,7 +64,7 @@ describe('ConfirmationEmailController', () => {
 
   it('should not be able to use an invalid uuid token format', async () => {
     const response = await request(app.getHttpServer()).patch(
-      '/tokens/confirmation-email/invalid-uuid-format',
+      '/users/confirmation-email/invalid-uuid-format',
     );
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
@@ -81,7 +81,7 @@ describe('ConfirmationEmailController', () => {
     const token = await tokensRepository.save(newToken);
 
     const response = await request(app.getHttpServer()).patch(
-      `/tokens/confirmation-email/${token.token}`,
+      `/users/confirmation-email/${token.token}`,
     );
 
     expect(response.status).toBe(HttpStatus.NOT_FOUND);
@@ -99,7 +99,7 @@ describe('ConfirmationEmailController', () => {
     );
 
     const response = await request(app.getHttpServer()).patch(
-      `/tokens/confirmation-email/${token.token}`,
+      `/users/confirmation-email/${token.token}`,
     );
 
     expect(response.status).toBe(HttpStatus.NOT_FOUND);
@@ -116,7 +116,7 @@ describe('ConfirmationEmailController', () => {
     );
 
     const response = await request(app.getHttpServer()).patch(
-      `/tokens/confirmation-email/${token.token}`,
+      `/users/confirmation-email/${token.token}`,
     );
 
     const updatedToken = await tokensRepository.findByToken(token.token);

@@ -6,13 +6,12 @@ import { AppModule } from '@/app.module';
 import { QueuesModule } from '@/infra/queues/queues.module';
 import { QueuesTestModule } from '@/infra/queues/queues-test.module';
 import { DatabaseService } from '@/infra/database/database.service';
-import { TokenType } from '@/entities/token/token.entity';
 import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { Providers } from '@/repositories/providers.enum';
 import { UserFactory } from '@/entities/user/user.factory';
 
-describe('ResendEmailController', () => {
+describe('ResendConfirmationEmailController', () => {
   let app: INestApplication;
   let user: User;
   let usersRepository: UsersRepositoryInterface;
@@ -58,43 +57,38 @@ describe('ResendEmailController', () => {
   });
 
   it('should not be able to resend an email without authentication', async () => {
-    const response = await request(app.getHttpServer())
-      .post('/tokens/resend-email')
-      .send({
-        tokenType: TokenType.CONFIRMATION_EMAIL,
-      });
+    const response = await request(app.getHttpServer()).post(
+      '/users/resend-confirmation-email',
+    );
 
     expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
   });
 
-  it('should not be able to resend an email with an invalid token type', async () => {
-    const response = await request(app.getHttpServer())
-      .post('/tokens/resend-email')
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        tokenType: 'invalid_token_type',
-      });
-
-    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-    expect(response.body).toEqual({
-      statusCode: HttpStatus.BAD_REQUEST,
-      message: ['Invalid token type'],
-      error: 'Bad Request',
-    });
-  });
-
   it('should be able to resend an email with a new token successfully', async () => {
     const response = await request(app.getHttpServer())
-      .post('/tokens/resend-email')
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        tokenType: TokenType.CONFIRMATION_EMAIL,
-      });
+      .post('/users/resend-confirmation-email')
+      .set('Authorization', `Bearer ${accessToken}`);
 
     expect(response.status).toBe(HttpStatus.OK);
     expect(response.body).toEqual({
       statusCode: HttpStatus.OK,
       message: 'Email resent successfully',
+    });
+  });
+
+  it('should not be able to resend an email if user already confirmed their email', async () => {
+    user.confirmedAt = new Date();
+    await usersRepository.save(user);
+
+    const response = await request(app.getHttpServer())
+      .post('/users/resend-confirmation-email')
+      .set('Authorization', `Bearer ${accessToken}`);
+
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    expect(response.body).toEqual({
+      error: 'Bad Request',
+      statusCode: HttpStatus.BAD_REQUEST,
+      message: 'User already confirmed their email',
     });
   });
 });

@@ -6,7 +6,7 @@ import { Match } from '@/utils/match.validator';
 export class UpdatePasswordRequestDto {
   @ApiProperty({
     description: 'Current password of the user',
-    example: 'currentPassword123',
+    example: 'pass1234',
   })
   @IsString()
   @IsNotEmpty()
@@ -14,7 +14,7 @@ export class UpdatePasswordRequestDto {
 
   @ApiProperty({
     description: 'New password for the user',
-    example: 'newPassword123',
+    example: 'newPass1234',
   })
   @IsString()
   @MinLength(8)
@@ -22,7 +22,7 @@ export class UpdatePasswordRequestDto {
 
   @ApiProperty({
     description: 'Confirmation of the new password',
-    example: 'newPassword123',
+    example: 'newPass1234',
   })
   @IsString()
   @Match('newPassword')

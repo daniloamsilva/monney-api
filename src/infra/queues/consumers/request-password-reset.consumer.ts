@@ -1,6 +1,6 @@
+import { Job } from 'bullmq';
 import { Inject, Logger } from '@nestjs/common';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Job } from 'bullmq';
 
 import { QueueType } from '../queues.enum';
 import { MailerService } from '@/infra/mailer/mailer.service';
@@ -9,8 +9,8 @@ import { UsersRepositoryInterface } from '@/repositories/users/users.repository.
 import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
 import { Token, TokenType } from '@/entities/token/token.entity';
 
-@Processor(QueueType.CONFIRMATION_EMAIL)
-export class ConfirmationEmailConsumer extends WorkerHost {
+@Processor(QueueType.PASSWORD_RESET_EMAIL)
+export class RequestPasswordResetConsumer extends WorkerHost {
   constructor(
     private readonly mailerService: MailerService,
     @Inject(Providers.USERS_REPOSITORY)
@@ -21,12 +21,12 @@ export class ConfirmationEmailConsumer extends WorkerHost {
     super();
   }
 
-  async process(job: Job<{ userId: string }>): Promise<void> {
+  async process(job: Job<{ userId: string }>) {
     const user = await this.usersRepository.findById(job.data.userId);
     const token = await this.tokensRepository.save(
       new Token({
         userId: user.id,
-        type: TokenType.CONFIRMATION_EMAIL,
+        type: TokenType.PASSWORD_RESET,
         createdAt: new Date(),
         updatedAt: new Date(),
       }),
@@ -35,19 +35,20 @@ export class ConfirmationEmailConsumer extends WorkerHost {
     try {
       await this.mailerService.sendMail({
         recipients: [{ address: user.email, name: user.name }],
-        subject: `Verifique seu e-mail da ${process.env.MAIL_FROM_NAME}`,
-        template: 'confirmation-email',
+        subject: `Redefinição de senha da ${process.env.MAIL_FROM_NAME}`,
+        template: 'password-reset',
         context: {
           name: user.name,
-          confirmationLink: `${process.env.APP_URL}/confirm-email?token=${token.token}`,
+          email: user.email,
+          resetLink: `${process.env.APP_URL}/reset-password?token=${token.token}`,
           from: process.env.MAIL_FROM_NAME,
         },
       });
     } catch (error) {
       Logger.error(
-        'Error sending confirmation email:',
+        'Error sending password reset email:',
         error,
-        ConfirmationEmailConsumer.name,
+        RequestPasswordResetConsumer.name,
       );
     }
   }
