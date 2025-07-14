@@ -32,7 +32,7 @@ describe('ResendConfirmationEmailService', () => {
     );
   });
 
-  it('should not be abel to resend an email if the user already confirmed their email', async () => {
+  it('should not be able to resend an email if the user already confirmed their email', async () => {
     const user = await usersRepository.save(
       UserFactory.create({ confirmedAt: new Date() }),
     );
