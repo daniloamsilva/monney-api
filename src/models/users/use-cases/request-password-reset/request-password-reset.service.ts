@@ -9,6 +9,7 @@ import { Providers } from '@/repositories/providers.enum';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { QueuesService } from '@/infra/queues/queues.service';
 import { QueueType } from '@/infra/queues/queues.enum';
+import { RequestPasswordResetRequestDto } from './request-password-reset.request.dto';
 
 @Injectable()
 export class RequestPasswordResetService {
@@ -18,7 +19,7 @@ export class RequestPasswordResetService {
     private readonly queuesService: QueuesService,
   ) {}
 
-  async execute(email: string) {
+  async execute({ email }: RequestPasswordResetRequestDto) {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {

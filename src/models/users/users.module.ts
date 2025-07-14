@@ -8,6 +8,7 @@ import { UpdatePasswordController } from './use-cases/update-password/update-pas
 import { GetUserController } from './use-cases/get-user/get-user.controller';
 import { ConfirmationEmailController } from './use-cases/confirmation-email/confirmation-email.controller';
 import { ResendConfirmationEmailController } from './use-cases/resend-confirmation-email/resend-confirmation-email.controller';
+import { RequestPasswordResetController } from './use-cases/request-password-reset/request-password-reset.controller';
 
 import { CreateUserService } from './use-cases/create-user/create-user.service';
 import { UpdateNameService } from './use-cases/update-name/update-name.service';
@@ -15,6 +16,7 @@ import { UpdatePasswordService } from './use-cases/update-password/update-passwo
 import { GetUserService } from './use-cases/get-user/get-user.service';
 import { ConfirmationEmailService } from './use-cases/confirmation-email/confirmation-email.service';
 import { ResendConfirmationEmailService } from './use-cases/resend-confirmation-email/resend-confirmation-email.service';
+import { RequestPasswordResetService } from './use-cases/request-password-reset/request-password-reset.service';
 
 import { UsersPostgresRepository } from '@/repositories/users/users-postgres.repository';
 import { TokensPostgresRepository } from '@/repositories/tokens/tokens-postgres.repository';
@@ -27,6 +29,7 @@ import { TokensPostgresRepository } from '@/repositories/tokens/tokens-postgres.
     GetUserController,
     ConfirmationEmailController,
     ResendConfirmationEmailController,
+    RequestPasswordResetController,
   ],
   providers: [
     CreateUserService,
@@ -35,6 +38,7 @@ import { TokensPostgresRepository } from '@/repositories/tokens/tokens-postgres.
     GetUserService,
     ConfirmationEmailService,
     ResendConfirmationEmailService,
+    RequestPasswordResetService,
     {
       provide: Providers.USERS_REPOSITORY,
       useClass: UsersPostgresRepository,
