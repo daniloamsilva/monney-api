@@ -30,13 +30,17 @@ describe('RequestPasswordResetService', () => {
 
   it('should not able to request password reset if user does not exist', async () => {
     await expect(
-      requestPasswordResetService.execute('non-exiting-user-email'),
+      requestPasswordResetService.execute({
+        email: 'non-exiting-user-email',
+      }),
     ).rejects.toThrow('User not found');
   });
 
   it('should be able to request password reset', async () => {
     const user = await usersRepository.save(UserFactory.create());
-    const result = await requestPasswordResetService.execute(user.email);
+    const result = await requestPasswordResetService.execute({
+      email: user.email,
+    });
 
     expect(result).toEqual({
       statusCode: HttpStatus.CREATED,

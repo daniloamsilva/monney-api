@@ -49,6 +49,7 @@ describe('RequestPasswordResetConsumer', () => {
       template: 'password-reset',
       context: {
         name: user.name,
+        email: user.email,
         resetLink: `${process.env.APP_URL}/reset-password?token=${token.token}`,
         from: process.env.MAIL_FROM_NAME,
       },
