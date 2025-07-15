@@ -24,6 +24,10 @@ export class TokensInMemoryRepository implements TokensRepositoryInterface {
     return token;
   }
 
+  async findById(id: number): Promise<Token | undefined> {
+    return this.tokens.find((t) => t.id === id && !t.deletedAt);
+  }
+
   async findByToken(token: string): Promise<Token | undefined> {
     return this.tokens.find((t) => t.token === token && !t.deletedAt);
   }
@@ -37,6 +41,20 @@ export class TokensInMemoryRepository implements TokensRepositoryInterface {
         t.userId === userId &&
         t.type === type &&
         t.expiresAt > new Date() &&
+        !t.deletedAt,
+    );
+  }
+
+  async findValidTokenByTokenAndType(
+    token: string,
+    type: TokenType,
+  ): Promise<Token | undefined> {
+    return this.tokens.find(
+      (t) =>
+        t.token === token &&
+        t.type === type &&
+        t.expiresAt > new Date() &&
+        !t.usedAt &&
         !t.deletedAt,
     );
   }
