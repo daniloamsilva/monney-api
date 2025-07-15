@@ -19,7 +19,7 @@ jobs:
         run: rm -f ~/.npmrc
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --verbose
 
       - name: Copy .env.example to .env
         run: cp .env.example .env
