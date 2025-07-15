@@ -68,3 +68,5 @@ Este projeto utiliza um ambiente Docker com os seguintes serviços definidos no 
 - Portas Expostas:
 - Interface Web: 8025
 - SMTP: ${MAIL_PORT}:1025
+
+test
