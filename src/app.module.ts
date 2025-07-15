@@ -9,10 +9,14 @@ import { AuthGuard } from './guards/auth.guard';
 
 import { AuthModule } from './models/auth/auth.module';
 import { UsersModule } from './models/users/users.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    ThrottlerModule.forRoot({
+      throttlers: [{ ttl: 60000, limit: 10 }],
+    }),
     DatabaseModule,
     QueuesModule,
     MailerModuler,
