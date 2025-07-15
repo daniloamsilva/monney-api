@@ -67,7 +67,24 @@ export class TokensPostgresRepository implements TokensRepositoryInterface {
     return new Token(mapSnakeToCamel(rows[0]));
   }
 
-  async findByToken(token: string): Promise<Token> {
+  async findById(id: number): Promise<Token | undefined> {
+    const rows = await this.database.query(
+      `
+        SELECT * FROM tokens
+        WHERE id = $1
+        AND deleted_at IS NULL;
+      `,
+      [id],
+    );
+
+    if (!rows.length) {
+      return undefined;
+    }
+
+    return new Token(mapSnakeToCamel(rows[0]));
+  }
+
+  async findByToken(token: string): Promise<Token | undefined> {
     const rows = await this.database.query(
       `
         SELECT * FROM tokens
@@ -78,7 +95,7 @@ export class TokensPostgresRepository implements TokensRepositoryInterface {
     );
 
     if (!rows.length) {
-      return null;
+      return undefined;
     }
 
     return new Token(mapSnakeToCamel(rows[0]));
@@ -100,5 +117,28 @@ export class TokensPostgresRepository implements TokensRepositoryInterface {
     );
 
     return rows.map((row) => new Token(mapSnakeToCamel(row)));
+  }
+
+  async findValidTokenByTokenAndType(
+    token: string,
+    type: TokenType,
+  ): Promise<Token | undefined> {
+    const rows = await this.database.query(
+      `
+        SELECT * FROM tokens
+        WHERE token = $1
+        AND type = $2
+        AND expires_at > NOW()
+        AND used_at IS NULL
+        AND deleted_at IS NULL;
+      `,
+      [token, type],
+    );
+
+    if (!rows.length) {
+      return undefined;
+    }
+
+    return new Token(mapSnakeToCamel(rows[0]));
   }
 }
