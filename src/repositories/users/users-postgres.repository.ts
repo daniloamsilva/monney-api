@@ -4,7 +4,7 @@ import { v7 as uuid } from 'uuid';
 import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from './users.repository.interface';
 import { DatabaseService } from '@/infra/database/database.service';
-import { mapSnakeToCamel } from '@/utils/mapSnakeToCamel';
+import { mapSnakeToCamel } from '@/utils/map-snake-to-camel';
 
 export class UsersPostgresRepository implements UsersRepositoryInterface {
   constructor(
