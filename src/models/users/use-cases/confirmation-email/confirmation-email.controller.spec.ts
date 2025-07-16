@@ -1,17 +1,12 @@
 import * as request from 'supertest';
 import { HttpStatus, INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
 
-import { AppModule } from '@/app.module';
-import { QueuesModule } from '@/infra/queues/queues.module';
-import { QueuesTestModule } from '@/infra/queues/queues-test.module';
-import { DatabaseService } from '@/infra/database/database.service';
 import { TokensRepositoryInterface } from '@/repositories/tokens/tokens.repository.interface';
-import { Providers } from '@/repositories/providers.enum';
 import { TokenType } from '@/entities/token/token.entity';
 import { TokenFactory } from '@/entities/token/token.factory';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { UserFactory } from '@/entities/user/user.factory';
+import { TestHelper } from '@/utils/test.helper';
 
 describe('ConfirmationEmailController', () => {
   let app: INestApplication;
@@ -19,20 +14,7 @@ describe('ConfirmationEmailController', () => {
   let usersRepository: UsersRepositoryInterface;
 
   beforeAll(async () => {
-    const module = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideModule(QueuesModule)
-      .useModule(QueuesTestModule)
-      .overrideProvider(DatabaseService)
-      .useValue(new DatabaseService(true))
-      .compile();
-
-    tokensRepository = module.get(Providers.TOKENS_REPOSITORY);
-    usersRepository = module.get(Providers.USERS_REPOSITORY);
-
-    app = module.createNestApplication();
-    await app.init();
+    ({ app, tokensRepository, usersRepository } = await TestHelper.setup());
   });
 
   afterAll(async () => {
