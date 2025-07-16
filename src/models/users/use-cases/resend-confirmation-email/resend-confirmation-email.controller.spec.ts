@@ -1,15 +1,10 @@
 import * as request from 'supertest';
-import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 
-import { AppModule } from '@/app.module';
-import { QueuesModule } from '@/infra/queues/queues.module';
-import { QueuesTestModule } from '@/infra/queues/queues-test.module';
-import { DatabaseService } from '@/infra/database/database.service';
 import { User } from '@/entities/user/user.entity';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
-import { Providers } from '@/repositories/providers.enum';
 import { UserFactory } from '@/entities/user/user.factory';
+import { TestHelper } from '@/utils/test.helper';
 
 describe('ResendConfirmationEmailController', () => {
   let app: INestApplication;
@@ -18,25 +13,7 @@ describe('ResendConfirmationEmailController', () => {
   let accessToken: string;
 
   beforeAll(async () => {
-    const module = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideModule(QueuesModule)
-      .useModule(QueuesTestModule)
-      .overrideProvider(DatabaseService)
-      .useValue(new DatabaseService(true))
-      .compile();
-
-    app = module.createNestApplication();
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-      }),
-    );
-    await app.init();
-
-    usersRepository = module.get(Providers.USERS_REPOSITORY);
+    ({ app, usersRepository } = await TestHelper.setup());
 
     user = await usersRepository.save(
       UserFactory.create({ password: 'pass1234' }),

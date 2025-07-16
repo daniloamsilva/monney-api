@@ -8,11 +8,13 @@ export class UserFactory {
 
     const normalizedName = name
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/\s+/g, '')
+      .replace(/[^a-z0-9]/gi, '');
 
     const email =
-      override?.email ??
-      `${normalizedName.toLowerCase().replace(/\s/g, '')}@${faker.internet.domainName()}`;
+      override?.email ?? `${normalizedName}@${faker.internet.domainName()}`;
 
     const createdAt = override?.createdAt ?? faker.date.past();
 
