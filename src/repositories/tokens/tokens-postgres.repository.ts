@@ -5,7 +5,7 @@ import { add } from 'date-fns';
 import { Token, TokenType } from '@/entities/token/token.entity';
 import { TokensRepositoryInterface } from './tokens.repository.interface';
 import { DatabaseService } from '@/infra/database/database.service';
-import { mapSnakeToCamel } from '@/utils/mapSnakeToCamel';
+import { mapSnakeToCamel } from '@/utils/map-snake-to-camel';
 
 export class TokensPostgresRepository implements TokensRepositoryInterface {
   constructor(

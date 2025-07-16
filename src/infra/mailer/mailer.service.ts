@@ -3,7 +3,7 @@ import * as nodemailer from 'nodemailer';
 import { Address } from 'nodemailer/lib/mailer';
 import * as hbs from 'nodemailer-express-handlebars';
 
-import { parseBoolean } from '@/utils/parseBoolean';
+import { parseBoolean } from '@/utils/parse-boolean';
 
 type mailOptions = {
   from?: Address;
