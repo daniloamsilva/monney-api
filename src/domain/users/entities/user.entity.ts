@@ -1,7 +1,7 @@
 import { v7 as uuid } from 'uuid';
 
 import { AggregateRoot } from '@src/shared/domain/AggregateRoot';
-import { Password } from '../value-objects/Password';
+import { Password } from '../value-objects/password.vo';
 import { UserCreatedEvent } from '../events/user-created.event';
 
 interface UserCreateProps {

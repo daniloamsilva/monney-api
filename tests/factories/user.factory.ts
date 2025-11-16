@@ -1,7 +1,7 @@
 import { fakerPT_BR as faker } from '@faker-js/faker';
 
-import { User } from '@src/users/domain/entities/User';
-import { Password } from '@src/users/domain/value-objects/Password';
+import { User } from '@src/domain/users/entities/user.entity';
+import { Password } from '@src/domain/users/value-objects/password.vo';
 
 interface UserFactoryProps {
   id: string;

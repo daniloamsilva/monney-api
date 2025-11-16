@@ -1,6 +1,6 @@
-import { CreateUserService } from '@src/users/application/use-cases/create-user.service';
-import { IUserRepository } from '@src/users/domain/repositories/user-repository.interface';
-import { Password } from '@src/users/domain/value-objects/Password';
+import { CreateUserService } from '@src/application/users/use-cases/create-user.service';
+import { IUserRepository } from '@src/domain/users/repositories/user-repository.interface';
+import { Password } from '@src/domain/users/value-objects/password.vo';
 import { UserFactory } from '@tests/factories/user.factory';
 import { InMemoryUserRepository } from '@tests/mocks/repositories/user-repository';
 

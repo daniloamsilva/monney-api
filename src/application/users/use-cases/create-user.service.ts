@@ -1,8 +1,8 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 
-import { IUserRepository } from '@src/users/domain/repositories/user-repository.interface';
-import { User } from '@src/users/domain/entities/User';
 import { DomainEvent } from '@src/shared/domain/DomainEvent';
+import { IUserRepository } from '@src/domain/users/repositories/user-repository.interface';
+import { User } from '@src/domain/users/entities/user.entity';
 
 export interface CreateUserUseCaseInput {
   email: string;
