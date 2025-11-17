@@ -45,7 +45,7 @@ export class User extends AggregateRoot<UserProps> {
   get createdAt(): Date {
     return this.props.createdAt;
   }
-  get updatedAt(): Date | undefined {
+  get updatedAt(): Date {
     return this.props.updatedAt;
   }
   get deletedAt(): Date | undefined {

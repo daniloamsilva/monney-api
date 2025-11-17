@@ -6,7 +6,7 @@ exports.up = (pgm) => {
       email TEXT NOT NULL,
       password TEXT NOT NULL, 
       confirmed_at TIMESTAMP,
-      is_active BOOLEAN DEFAULT FALSE,
+      is_active BOOLEAN DEFAULT TRUE,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       deleted_at TIMESTAMP
@@ -15,7 +15,7 @@ exports.up = (pgm) => {
 
   pgm.sql(`
     CREATE UNIQUE INDEX idx_users_email_unique
-    ON users (email); 
+    ON users (email) WHERE deleted_at IS NULL; 
   `);
 
   pgm.sql(`

@@ -10,7 +10,7 @@ let isDatabaseMigrated = false;
 
 beforeAll(async () => {
   const currentTestName = expect.getState().testPath;
-  isControllerTest = currentTestName.includes('controller.spec');
+  isControllerTest = currentTestName.includes('controller.test');
 
   if (isControllerTest && !isDatabaseMigrated) {
     execSync('npm run migration:up', {

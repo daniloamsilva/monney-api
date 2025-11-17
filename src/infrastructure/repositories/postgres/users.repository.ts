@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { IUsersRepository } from '@src/domain/users/repositories/user-repository.interface';
+import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 import { DatabaseService } from '@src/infrastructure/database/database.service';
 import { User } from '@src/domain/users/entities/user.entity';
 import { UserMapper } from '../mappers/user.mapper';

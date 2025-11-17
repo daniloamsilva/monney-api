@@ -14,7 +14,7 @@ interface UserDbRow {
 }
 
 export class UserMapper {
-  public static toPersistence(user: User): any {
+  public static toPersistence(user: User): UserDbRow {
     return {
       id: user.id,
       name: user.name,

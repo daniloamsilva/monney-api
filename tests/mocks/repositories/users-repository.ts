@@ -1,7 +1,7 @@
 import { User } from '@src/domain/users/entities/user.entity';
-import { IUsersRepository } from '@src/domain/users/repositories/user-repository.interface';
+import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 
-export class InMemoryUserRepository implements IUsersRepository {
+export class InMemoryUsersRepository implements IUsersRepository {
   private users: User[] = [];
 
   async findById(id: string): Promise<User | null> {
@@ -15,6 +15,12 @@ export class InMemoryUserRepository implements IUsersRepository {
   }
 
   async save(user: User): Promise<void> {
-    this.users.push(user);
+    const index = this.users.findIndex((u) => u.id === user.id);
+
+    if (index !== -1) {
+      this.users[index] = user;
+    } else {
+      this.users.push(user);
+    }
   }
 }

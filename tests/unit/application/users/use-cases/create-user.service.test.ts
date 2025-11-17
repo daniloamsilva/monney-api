@@ -1,19 +1,19 @@
 import { CreateUserService } from '@src/application/users/use-cases/create-user.service';
-import { IUsersRepository } from '@src/domain/users/repositories/user-repository.interface';
+import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 import { Password } from '@src/domain/users/value-objects/password.vo';
 import { UserFactory } from '@tests/factories/user.factory';
-import { InMemoryUserRepository } from '@tests/mocks/repositories/user-repository';
+import { InMemoryUsersRepository } from '@tests/mocks/repositories/users-repository';
 
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
   let usersRepository: IUsersRepository;
 
   beforeEach(() => {
-    usersRepository = new InMemoryUserRepository();
+    usersRepository = new InMemoryUsersRepository();
     createUserService = new CreateUserService(usersRepository);
   });
 
-  it('should not be able to create a new user with the an email already used', async () => {
+  it('should not be able to create a new user with an email already used', async () => {
     const user = UserFactory.create();
     await usersRepository.save(user);
 
