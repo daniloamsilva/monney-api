@@ -13,13 +13,13 @@
     "start:prod": "node dist/main",
     "lint:check": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
-    "test": "jest --detectOpenHandles",
+    "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage --runInBand",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "migration:create": "node-pg-migrate -m src/infra/database/migrations -t migrations create",
-    "migration:up": "node-pg-migrate -m src/infra/database/migrations -t migrations up",
-    "migration:down": "node-pg-migrate -m src/infra/database/migrations -t migrations down"
+    "migration:create": "node-pg-migrate -m src/infrastructure/migrations -t migrations create",
+    "migration:up": "node-pg-migrate -m src/infrastructure/migrations -t migrations up",
+    "migration:down": "node-pg-migrate -m src/infrastructure/migrations -t migrations down"
   },
   "dependencies": {
     "@nestjs/bullmq": "^11.0.1",
@@ -71,34 +71,5 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": ".",
-    "testRegex": ".*\\.test\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "./coverage",
-    "coveragePathIgnorePatterns": [
-      "main.ts",
-      "src/infra/database/*",
-      "src/infra/mailer/*"
-    ],
-    "testEnvironment": "node",
-    "setupFilesAfterEnv": [
-      "./jest.setup.ts"
-    ],
-    "moduleNameMapper": {
-      "@src/(.*)": "<rootDir>/src/$1",
-      "@tests/(.*)": "<rootDir>/tests/$1"
-    }
   }
 }

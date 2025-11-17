@@ -10,14 +10,15 @@ interface UserCreateProps {
   plainTextPassword: string;
 }
 
-interface UserProps {
+export interface UserProps {
   id: string;
   email: string;
   name: string;
   password: Password;
+  confirmedAt?: Date | null;
   isActive: boolean;
   createdAt: Date;
-  updatedAt?: Date;
+  updatedAt: Date;
   deletedAt?: Date | null;
 }
 
@@ -32,6 +33,12 @@ export class User extends AggregateRoot<UserProps> {
   get name(): string {
     return this.props.name;
   }
+  get password(): Password {
+    return this.props.password;
+  }
+  get confirmedAt(): Date | undefined {
+    return this.props.confirmedAt;
+  }
   get isActive(): boolean {
     return this.props.isActive;
   }
@@ -40,6 +47,9 @@ export class User extends AggregateRoot<UserProps> {
   }
   get updatedAt(): Date | undefined {
     return this.props.updatedAt;
+  }
+  get deletedAt(): Date | undefined {
+    return this.props.deletedAt;
   }
 
   public static async create(props: UserCreateProps): Promise<User> {

@@ -1,23 +1,19 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 
 import { DomainEvent } from '@src/shared/domain/DomainEvent';
-import { IUserRepository } from '@src/domain/users/repositories/user-repository.interface';
+import { IUsersRepository } from '@src/domain/users/repositories/user-repository.interface';
 import { User } from '@src/domain/users/entities/user.entity';
-
-export interface CreateUserUseCaseInput {
-  email: string;
-  name: string;
-  password: string;
-}
+import { CreateUserDto } from '../dtos/create-user.dto';
+import { Providers } from '@src/infrastructure/repositories/providers.enum';
 
 @Injectable()
 export class CreateUserService {
   constructor(
-    @Inject('IUserRepository')
-    private readonly userRepository: IUserRepository,
+    @Inject(Providers.USERS_REPOSITORY)
+    private readonly userRepository: IUsersRepository,
   ) {}
 
-  async execute(input: CreateUserUseCaseInput): Promise<void> {
+  async execute(input: CreateUserDto): Promise<void> {
     const emailExists = await this.userRepository.findByEmail(input.email);
 
     if (emailExists) {

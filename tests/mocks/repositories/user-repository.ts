@@ -1,7 +1,7 @@
 import { User } from '@src/domain/users/entities/user.entity';
-import { IUserRepository } from '@src/domain/users/repositories/user-repository.interface';
+import { IUsersRepository } from '@src/domain/users/repositories/user-repository.interface';
 
-export class InMemoryUserRepository implements IUserRepository {
+export class InMemoryUserRepository implements IUsersRepository {
   private users: User[] = [];
 
   async findById(id: string): Promise<User | null> {

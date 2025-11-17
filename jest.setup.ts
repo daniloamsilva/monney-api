@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import { execSync } from 'node:child_process';
 
-import { DatabaseService } from '@src/old/infra/database/database.service';
+import { DatabaseService } from '@src/infrastructure/database/database.service';
 
 dotenv.config();
 

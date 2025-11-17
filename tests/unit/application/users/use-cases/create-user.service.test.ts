@@ -1,12 +1,12 @@
 import { CreateUserService } from '@src/application/users/use-cases/create-user.service';
-import { IUserRepository } from '@src/domain/users/repositories/user-repository.interface';
+import { IUsersRepository } from '@src/domain/users/repositories/user-repository.interface';
 import { Password } from '@src/domain/users/value-objects/password.vo';
 import { UserFactory } from '@tests/factories/user.factory';
 import { InMemoryUserRepository } from '@tests/mocks/repositories/user-repository';
 
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
-  let usersRepository: IUserRepository;
+  let usersRepository: IUsersRepository;
 
   beforeEach(() => {
     usersRepository = new InMemoryUserRepository();
@@ -22,6 +22,7 @@ describe('CreateUserService', () => {
         name: 'John Doe',
         email: user.email,
         password: 'pass1234',
+        passwordConfirmation: 'pass1234',
       }),
     ).rejects.toThrow('User email already exists');
   });
@@ -31,6 +32,7 @@ describe('CreateUserService', () => {
       name: 'John Doe',
       email: 'john.doe@example.com',
       password: 'pass1234',
+      passwordConfirmation: 'pass1234',
     });
 
     const createdUser = await usersRepository.findByEmail(

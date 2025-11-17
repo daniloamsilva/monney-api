@@ -8,9 +8,10 @@ interface UserFactoryProps {
   name: string;
   email: string;
   password: Password;
+  confirmedAt?: Date | null;
   isActive: boolean;
   createdAt: Date;
-  updatedAt?: Date;
+  updatedAt: Date;
   deletedAt?: Date | null;
 }
 
@@ -28,7 +29,11 @@ export class UserFactory {
     const email =
       override?.email ?? `${normalizedName}@${faker.internet.domainName()}`;
 
+    const confirmedAt = override?.confirmedAt ?? null;
     const createdAt = override?.createdAt ?? faker.date.past();
+    const updatedAt = override?.updatedAt ?? createdAt;
+    const deletedAt = override?.deletedAt ?? null;
+
     const password =
       override?.password ?? Password.fromHash(faker.string.alphanumeric(60));
 
@@ -39,8 +44,11 @@ export class UserFactory {
           name,
           email,
           password,
+          confirmedAt,
           isActive: true,
           createdAt,
+          updatedAt,
+          deletedAt,
         },
         override,
       ),
