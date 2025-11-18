@@ -1,4 +1,5 @@
 import { User, UserProps } from '@src/domain/users/entities/user.entity';
+import { Email } from '@src/domain/users/value-objects/email.vo';
 import { Password } from '@src/domain/users/value-objects/password.vo';
 
 interface UserDbRow {
@@ -18,7 +19,7 @@ export class UserMapper {
     return {
       id: user.id,
       name: user.name,
-      email: user.email,
+      email: user.email.value,
       password: user.password.value,
       confirmed_at: user.confirmedAt,
       is_active: user.isActive,
@@ -32,7 +33,7 @@ export class UserMapper {
     const userProps: UserProps = {
       id: raw.id,
       name: raw.name,
-      email: raw.email,
+      email: Email.create(raw.email),
       password: Password.fromHash(raw.password),
       confirmedAt: raw.confirmed_at,
       isActive: raw.is_active,

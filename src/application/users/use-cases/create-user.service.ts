@@ -1,4 +1,9 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 
 import { DomainEvent } from '@src/shared/domain/DomainEvent';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
@@ -14,6 +19,10 @@ export class CreateUserService {
   ) {}
 
   async execute(input: CreateUserDto): Promise<void> {
+    if (input.password !== input.passwordConfirmation) {
+      throw new BadRequestException("Passwords don't match");
+    }
+
     const emailExists = await this.usersRepository.findByEmail(input.email);
 
     if (emailExists) {

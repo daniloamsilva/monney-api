@@ -1,12 +1,13 @@
 import { fakerPT_BR as faker } from '@faker-js/faker';
 
 import { User } from '@src/domain/users/entities/user.entity';
+import { Email } from '@src/domain/users/value-objects/email.vo';
 import { Password } from '@src/domain/users/value-objects/password.vo';
 
 interface UserFactoryProps {
   id: string;
   name: string;
-  email: string;
+  email: Email;
   password: Password;
   confirmedAt?: Date | null;
   isActive: boolean;
@@ -27,15 +28,16 @@ export class UserFactory {
       .replace(/[^a-z0-9]/gi, '');
 
     const email =
-      override?.email ?? `${normalizedName}@${faker.internet.domainName()}`;
+      override?.email ??
+      Email.create(`${normalizedName}@${faker.internet.domainName()}`);
+
+    const password =
+      override?.password ?? Password.fromHash(faker.string.alphanumeric(60));
 
     const confirmedAt = override?.confirmedAt ?? null;
     const createdAt = override?.createdAt ?? faker.date.past();
     const updatedAt = override?.updatedAt ?? createdAt;
     const deletedAt = override?.deletedAt ?? null;
-
-    const password =
-      override?.password ?? Password.fromHash(faker.string.alphanumeric(60));
 
     return User.hydrate(
       Object.assign(

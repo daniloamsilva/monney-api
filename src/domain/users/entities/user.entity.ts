@@ -3,6 +3,7 @@ import { v7 as uuid } from 'uuid';
 import { AggregateRoot } from '@src/shared/domain/AggregateRoot';
 import { Password } from '../value-objects/password.vo';
 import { UserCreatedEvent } from '../events/user-created.event';
+import { Email } from '../value-objects/email.vo';
 
 interface UserCreateProps {
   email: string;
@@ -12,7 +13,7 @@ interface UserCreateProps {
 
 export interface UserProps {
   id: string;
-  email: string;
+  email: Email;
   name: string;
   password: Password;
   confirmedAt?: Date | null;
@@ -27,7 +28,7 @@ export class User extends AggregateRoot<UserProps> {
     super(props);
   }
 
-  get email(): string {
+  get email(): Email {
     return this.props.email;
   }
   get name(): string {
@@ -54,11 +55,12 @@ export class User extends AggregateRoot<UserProps> {
 
   public static async create(props: UserCreateProps): Promise<User> {
     const id = uuid();
+    const email = Email.create(props.email);
     const password = await Password.create(props.plainTextPassword);
 
     const userProps: UserProps = {
       id: id,
-      email: props.email,
+      email: email,
       name: props.name,
       password: password,
       isActive: true,

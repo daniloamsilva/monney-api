@@ -4,7 +4,7 @@ import { INestApplication } from '@nestjs/common';
 
 import { TestSetup } from '@tests/integration/test.setup';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
-import { UserFactory } from '@tests/factories/user.factory';
+import { UserFactory } from '@tests/mocks/factories/user.factory';
 
 describe('CreateUserController', () => {
   let app: INestApplication;
@@ -27,7 +27,7 @@ describe('CreateUserController', () => {
     });
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-    expect(response.body.message).toEqual(['email must be an email']);
+    expect(response.body.message).toBe('Invalid email format');
   });
 
   it('should not be able to create a new user with a password less than 8 characters', async () => {
@@ -39,9 +39,9 @@ describe('CreateUserController', () => {
     });
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-    expect(response.body.message).toEqual([
-      'password must be longer than or equal to 8 characters',
-    ]);
+    expect(response.body.message).toBe(
+      'Password must be longer than or equal to 8 characters',
+    );
   });
 
   it('should not be able to create a new user with a passwordConfirmation different from password', async () => {
@@ -53,9 +53,7 @@ describe('CreateUserController', () => {
     });
 
     expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-    expect(response.body.message).toEqual([
-      "password and passwordConfirmation don't match",
-    ]);
+    expect(response.body.message).toBe("Passwords don't match");
   });
 
   it('should not be able to create a new user with an email already used', async () => {
@@ -64,7 +62,7 @@ describe('CreateUserController', () => {
 
     const response = await request(app.getHttpServer()).post('/users').send({
       name: 'John Doe',
-      email: user.email,
+      email: user.email.value,
       password: 'pass1234',
       passwordConfirmation: 'pass1234',
     });

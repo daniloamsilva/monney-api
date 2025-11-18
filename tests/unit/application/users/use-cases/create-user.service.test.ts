@@ -1,7 +1,7 @@
 import { CreateUserService } from '@src/application/users/use-cases/create-user.service';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 import { Password } from '@src/domain/users/value-objects/password.vo';
-import { UserFactory } from '@tests/factories/user.factory';
+import { UserFactory } from '@tests/mocks/factories/user.factory';
 import { InMemoryUsersRepository } from '@tests/mocks/repositories/users-repository';
 
 describe('CreateUserService', () => {
@@ -13,6 +13,39 @@ describe('CreateUserService', () => {
     createUserService = new CreateUserService(usersRepository);
   });
 
+  it('should not be able to create a new user with an invalid email', async () => {
+    await expect(
+      createUserService.execute({
+        name: 'John Doe',
+        email: 'invalid-email',
+        password: 'pass1234',
+        passwordConfirmation: 'pass1234',
+      }),
+    ).rejects.toThrow('Invalid email format');
+  });
+
+  it('should not be able to create a new user with a password less than 8 characters', async () => {
+    await expect(
+      createUserService.execute({
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+        password: 'pass',
+        passwordConfirmation: 'pass',
+      }),
+    ).rejects.toThrow('Password must be longer than or equal to 8 characters');
+  });
+
+  it('should not be able to create a new user with a passwordConfirmation different from password', async () => {
+    await expect(
+      createUserService.execute({
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+        password: 'pass1234',
+        passwordConfirmation: 'different-pass',
+      }),
+    ).rejects.toThrow("Passwords don't match");
+  });
+
   it('should not be able to create a new user with an email already used', async () => {
     const user = UserFactory.create();
     await usersRepository.save(user);
@@ -20,7 +53,7 @@ describe('CreateUserService', () => {
     await expect(
       createUserService.execute({
         name: 'John Doe',
-        email: user.email,
+        email: user.email.value,
         password: 'pass1234',
         passwordConfirmation: 'pass1234',
       }),
@@ -43,7 +76,11 @@ describe('CreateUserService', () => {
       expect.objectContaining({
         props: {
           id: expect.any(String),
-          email: 'john.doe@example.com',
+          email: expect.objectContaining({
+            props: {
+              value: 'john.doe@example.com',
+            },
+          }),
           name: 'John Doe',
           isActive: true,
           password: expect.any(Password),
