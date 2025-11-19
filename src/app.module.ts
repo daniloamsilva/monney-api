@@ -1,15 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
-
-import { DatabaseModule } from './infra/database/database.module';
-import { QueuesModule } from './infra/queues/queues.module';
-import { MailerModuler } from './infra/mailer/mailer.module';
-import { AuthGuard } from './guards/auth.guard';
-
-import { AuthModule } from './models/auth/auth.module';
-import { UsersModule } from './models/users/users.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+
+import { DatabaseModule } from './infrastructure/database/database.module';
+
+import { UsersModule } from './api/users/users.module';
+import { DomainErrorFilter } from './api/shared/filters/domain-error.filter';
+import { ClassValidatorFilter } from './api/shared/filters/class-validator.filter';
 
 @Module({
   imports: [
@@ -18,16 +16,23 @@ import { ThrottlerModule } from '@nestjs/throttler';
       throttlers: [{ ttl: 60000, limit: 10 }],
     }),
     DatabaseModule,
-    QueuesModule,
-    MailerModuler,
-
-    AuthModule,
     UsersModule,
   ],
   providers: [
     {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    },
+    {
+      provide: APP_FILTER,
+      useClass: DomainErrorFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: ClassValidatorFilter,
     },
   ],
 })

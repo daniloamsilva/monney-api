@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import { execSync } from 'node:child_process';
 
-import { DatabaseService } from '@/infra/database/database.service';
+import { DatabaseService } from '@src/infrastructure/database/database.service';
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ let isDatabaseMigrated = false;
 
 beforeAll(async () => {
   const currentTestName = expect.getState().testPath;
-  isControllerTest = currentTestName.includes('controller.spec');
+  isControllerTest = currentTestName.includes('controller.test');
 
   if (isControllerTest && !isDatabaseMigrated) {
     execSync('npm run migration:up', {
