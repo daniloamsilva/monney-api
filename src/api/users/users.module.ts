@@ -19,7 +19,7 @@ import { UserCreatedEvent } from '@src/domain/users/events/user-created.event';
 
 // Event Handlers
 import {
-  SEND_CONFIRMATION_EMAIL_HANDLER_PROVIDER,
+  SEND_EMAIL_CONFIRMATION_HANDLER_PROVIDER,
   SendEmailConfirmationHandler,
 } from '@src/infrastructure/event-handlers/send-email-confirmation.handler';
 
@@ -39,7 +39,7 @@ import {
     // Event Handlers
     SendEmailConfirmationHandler,
     {
-      provide: SEND_CONFIRMATION_EMAIL_HANDLER_PROVIDER,
+      provide: SEND_EMAIL_CONFIRMATION_HANDLER_PROVIDER,
       useFactory: (handler: SendEmailConfirmationHandler) => {
         DomainEvent.register(handler, UserCreatedEvent.name);
         return handler;

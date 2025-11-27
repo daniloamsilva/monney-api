@@ -7,7 +7,7 @@ import { MailerService } from '@src/infrastructure/mailer/mailer.service';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 import { USERS_REPOSITORY_PROVIDER } from '@src/infrastructure/repositories/postgres/users.repository';
 
-@Processor(QueueType.CONFIRMATION_EMAIL)
+@Processor(QueueType.EMAIL_CONFIRMATION)
 export class EmailConfirmationConsumer extends WorkerHost {
   constructor(
     private readonly mailerService: MailerService,
@@ -24,7 +24,7 @@ export class EmailConfirmationConsumer extends WorkerHost {
     // const token = await this.tokensRepository.save(
     //   new Token({
     //     userId: user.id,
-    //     type: TokenType.CONFIRMATION_EMAIL,
+    //     type: TokenType.EMAIL_CONFIRMATION,
     //     createdAt: new Date(),
     //     updatedAt: new Date(),
     //   }),

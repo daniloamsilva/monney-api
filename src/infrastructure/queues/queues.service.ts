@@ -9,11 +9,11 @@ export class QueuesService {
   private readonly queueMap: Map<QueueType, Queue>;
 
   constructor(
-    @InjectQueue(QueueType.CONFIRMATION_EMAIL)
+    @InjectQueue(QueueType.EMAIL_CONFIRMATION)
     private readonly confirmationEmailQueue: Queue,
   ) {
     this.queueMap = new Map<QueueType, Queue>([
-      [QueueType.CONFIRMATION_EMAIL, this.confirmationEmailQueue],
+      [QueueType.EMAIL_CONFIRMATION, this.confirmationEmailQueue],
     ]);
   }
 

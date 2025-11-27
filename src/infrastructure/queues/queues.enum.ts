@@ -1,3 +1,3 @@
 export enum QueueType {
-  CONFIRMATION_EMAIL = 'confirmation_email',
+  EMAIL_CONFIRMATION = 'email_confirmation',
 }
