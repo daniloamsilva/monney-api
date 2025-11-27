@@ -5,6 +5,8 @@ import { DatabaseService } from '@src/infrastructure/database/database.service';
 import { User } from '@src/domain/users/entities/user.entity';
 import { UserMapper } from '../mappers/user.mapper';
 
+export const USERS_REPOSITORY_PROVIDER = 'IUsersRepository';
+
 @Injectable()
 export class UsersRepository implements IUsersRepository {
   constructor(

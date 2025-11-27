@@ -9,12 +9,12 @@ import { DomainEvent } from '@src/shared/domain/DomainEvent';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 import { User } from '@src/domain/users/entities/user.entity';
 import { CreateUserDto } from '../dtos/create-user.dto';
-import { Providers } from '@src/infrastructure/repositories/providers.enum';
+import { USERS_REPOSITORY_PROVIDER } from '@src/infrastructure/repositories/postgres/users.repository';
 
 @Injectable()
 export class CreateUserService {
   constructor(
-    @Inject(Providers.USERS_REPOSITORY)
+    @Inject(USERS_REPOSITORY_PROVIDER)
     private readonly usersRepository: IUsersRepository,
   ) {}
 

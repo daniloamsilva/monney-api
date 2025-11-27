@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 
 import { AppModule } from '@src/app.module';
 import { DatabaseService } from '@src/infrastructure/database/database.service';
-import { Providers } from '@src/infrastructure/repositories/providers.enum';
+import { USERS_REPOSITORY_PROVIDER } from '@src/infrastructure/repositories/postgres/users.repository';
 
 export class TestSetup {
   static async setup() {
@@ -19,7 +19,7 @@ export class TestSetup {
 
     return {
       app,
-      usersRepository: module.get(Providers.USERS_REPOSITORY),
+      usersRepository: module.get(USERS_REPOSITORY_PROVIDER),
     };
   }
 }
