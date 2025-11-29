@@ -19,16 +19,6 @@ exports.up = (pgm) => {
   `);
 
   pgm.sql(`
-    CREATE OR REPLACE FUNCTION trigger_set_timestamp()
-    RETURNS TRIGGER AS $$
-    BEGIN
-      NEW.updated_at = NOW();
-      RETURN NEW;
-    END;
-    $$ LANGUAGE plpgsql;
-  `);
-
-  pgm.sql(`
     CREATE TRIGGER set_timestamp
     BEFORE UPDATE ON users
     FOR EACH ROW
@@ -37,19 +27,9 @@ exports.up = (pgm) => {
 };
 
 exports.down = (pgm) => {
-  pgm.sql(`
-    DROP TRIGGER set_timestamp ON users;
-  `);
+  pgm.sql(`DROP TRIGGER set_timestamp ON users;`);
 
-  pgm.sql(`
-    DROP FUNCTION trigger_set_timestamp();
-  `);
+  pgm.sql(`DROP INDEX idx_users_email_unique;`);
 
-  pgm.sql(`
-    DROP INDEX idx_users_email_unique;
-  `);
-
-  pgm.sql(`
-    DROP TABLE users;
-  `);
+  pgm.sql(`DROP TABLE users;`);
 };
