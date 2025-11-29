@@ -29,6 +29,21 @@ export class Token extends Aggregate<TokenProps> {
   get value(): string {
     return this.props.id;
   }
+  get type(): TokenType {
+    return this.props.type;
+  }
+  get expiresAt(): Date {
+    return this.props.expiresAt;
+  }
+  get usedAt(): Date | undefined {
+    return this.props.usedAt;
+  }
+  get createdAt(): Date {
+    return this.props.createdAt;
+  }
+  get updatedAt(): Date {
+    return this.props.updatedAt;
+  }
   get deletedAt(): Date | undefined {
     return this.props.deletedAt;
   }
@@ -49,5 +64,9 @@ export class Token extends Aggregate<TokenProps> {
 
   public static hydrate(props: TokenProps): Token {
     return new Token(props);
+  }
+
+  get isUsed(): boolean {
+    return !!this.props.usedAt;
   }
 }

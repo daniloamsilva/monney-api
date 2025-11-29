@@ -1,8 +1,10 @@
 import { fakerPT_BR as faker } from '@faker-js/faker';
 
+import { Token } from '@src/domain/users/entities/token.entity';
 import { User } from '@src/domain/users/entities/user.entity';
 import { Email } from '@src/domain/users/value-objects/email.vo';
 import { Password } from '@src/domain/users/value-objects/password.vo';
+import { TokenFactory } from './token.factory';
 
 interface UserFactoryProps {
   id: string;
@@ -11,6 +13,7 @@ interface UserFactoryProps {
   password: Password;
   confirmedAt?: Date | null;
   isActive: boolean;
+  tokens?: Token[];
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date | null;
@@ -35,6 +38,7 @@ export class UserFactory {
       override?.password ?? Password.fromHash(faker.string.alphanumeric(60));
 
     const confirmedAt = override?.confirmedAt ?? null;
+    const tokens = override?.tokens ?? [TokenFactory.create()];
     const createdAt = override?.createdAt ?? faker.date.past();
     const updatedAt = override?.updatedAt ?? createdAt;
     const deletedAt = override?.deletedAt ?? null;
@@ -48,6 +52,7 @@ export class UserFactory {
           password,
           confirmedAt,
           isActive: true,
+          tokens,
           createdAt,
           updatedAt,
           deletedAt,

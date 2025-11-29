@@ -4,6 +4,7 @@ import { AggregateRoot } from '@src/shared/domain/AggregateRoot';
 import { Password } from '../value-objects/password.vo';
 import { UserCreatedEvent } from '../events/user-created.event';
 import { Email } from '../value-objects/email.vo';
+import { Token } from './token.entity';
 
 interface UserCreateProps {
   email: string;
@@ -18,6 +19,7 @@ export interface UserProps {
   password: Password;
   confirmedAt?: Date | null;
   isActive: boolean;
+  tokens: Token[];
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date | null;
@@ -43,6 +45,9 @@ export class User extends AggregateRoot<UserProps> {
   get isActive(): boolean {
     return this.props.isActive;
   }
+  get tokens(): Token[] {
+    return this.props.tokens;
+  }
   get createdAt(): Date {
     return this.props.createdAt;
   }
@@ -64,6 +69,7 @@ export class User extends AggregateRoot<UserProps> {
       name: props.name,
       password: password,
       isActive: true,
+      tokens: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     };

@@ -13,26 +13,15 @@ export class EmailConfirmationConsumer extends WorkerHost {
     private readonly mailerService: MailerService,
     @Inject(USERS_REPOSITORY_PROVIDER)
     private readonly usersRepository: IUsersRepository,
-    // @Inject(Providers.TOKENS_REPOSITORY)
-    // private readonly tokensRepository: TokensRepositoryInterface,
   ) {
     super();
   }
 
   async process(job: Job<{ userId: string }>): Promise<void> {
     const user = await this.usersRepository.findById(job.data.userId);
-    // const token = await this.tokensRepository.save(
-    //   new Token({
-    //     userId: user.id,
-    //     type: TokenType.EMAIL_CONFIRMATION,
-    //     createdAt: new Date(),
-    //     updatedAt: new Date(),
-    //   }),
-    // );
-
-    const token = {
-      value: 'token-placeholder',
-    };
+    const token = user.tokens.find(
+      (t) => t.type === 'EMAIL_CONFIRMATION' && !t.isUsed,
+    );
 
     try {
       await this.mailerService.sendMail({

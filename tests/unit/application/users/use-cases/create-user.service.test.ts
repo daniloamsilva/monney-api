@@ -83,6 +83,7 @@ describe('CreateUserService', () => {
           }),
           name: 'John Doe',
           isActive: true,
+          tokens: [],
           password: expect.any(Password),
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),

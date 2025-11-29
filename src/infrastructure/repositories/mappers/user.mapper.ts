@@ -1,6 +1,7 @@
 import { User, UserProps } from '@src/domain/users/entities/user.entity';
 import { Email } from '@src/domain/users/value-objects/email.vo';
 import { Password } from '@src/domain/users/value-objects/password.vo';
+import { TokenDbRow, TokenMapper } from './token.mapper';
 
 interface UserDbRow {
   id: string;
@@ -9,6 +10,7 @@ interface UserDbRow {
   password: string;
   confirmed_at: Date | null;
   is_active: boolean;
+  tokens: TokenDbRow[];
   created_at: Date;
   updated_at: Date;
   deleted_at: Date | null;
@@ -26,6 +28,10 @@ export class UserMapper {
       created_at: user.createdAt,
       updated_at: user.updatedAt,
       deleted_at: user.deletedAt,
+
+      tokens: user.tokens.map((token) =>
+        TokenMapper.toPersistence(Object.assign(token, { userId: user.id })),
+      ),
     };
   }
 
@@ -40,9 +46,10 @@ export class UserMapper {
       createdAt: raw.created_at,
       updatedAt: raw.updated_at,
       deletedAt: raw.deleted_at,
+
+      tokens: raw.tokens?.map((tokenRow) => TokenMapper.toDomain(tokenRow)),
     };
 
-    const user = User.hydrate(userProps);
-    return user;
+    return User.hydrate(userProps);
   }
 }
