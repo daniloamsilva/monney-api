@@ -6,6 +6,7 @@ import { QueueType } from '../queues.enum';
 import { MailerService } from '@src/infrastructure/mailer/mailer.service';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 import { USERS_REPOSITORY_PROVIDER } from '@src/infrastructure/repositories/postgres/users.repository';
+import { TokenType } from '@src/domain/users/entities/token.entity';
 
 @Processor(QueueType.EMAIL_CONFIRMATION)
 export class EmailConfirmationConsumer extends WorkerHost {
@@ -19,8 +20,11 @@ export class EmailConfirmationConsumer extends WorkerHost {
 
   async process(job: Job<{ userId: string }>): Promise<void> {
     const user = await this.usersRepository.findById(job.data.userId);
+    user.createToken(TokenType.EMAIL_CONFIRMATION);
+    await this.usersRepository.save(user);
+
     const token = user.tokens.find(
-      (t) => t.type === 'EMAIL_CONFIRMATION' && !t.isUsed,
+      (t) => t.type === TokenType.EMAIL_CONFIRMATION,
     );
 
     try {

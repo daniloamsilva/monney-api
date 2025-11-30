@@ -4,7 +4,7 @@ import { AggregateRoot } from '@src/shared/domain/AggregateRoot';
 import { Password } from '../value-objects/password.vo';
 import { UserCreatedEvent } from '../events/user-created.event';
 import { Email } from '../value-objects/email.vo';
-import { Token } from './token.entity';
+import { Token, TokenType } from './token.entity';
 
 interface UserCreateProps {
   email: string;
@@ -85,6 +85,18 @@ export class User extends AggregateRoot<UserProps> {
     );
 
     return user;
+  }
+
+  public createToken(type: TokenType): Token {
+    this.tokens.forEach((token) => {
+      if (token.type === type) {
+        token.invalidate();
+      }
+    });
+
+    const token = Token.create(type);
+    this.tokens.push(token);
+    return token;
   }
 
   public static hydrate(props: UserProps): User {

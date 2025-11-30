@@ -48,4 +48,149 @@ describe('TokenEntity', () => {
       }),
     );
   });
+
+  it('should return true if token has been used', () => {
+    const props = {
+      id: 'token-id',
+      type: TokenType.EMAIL_CONFIRMATION,
+      expiresAt: new Date('2024-12-31T23:59:59Z'),
+      usedAt: new Date(),
+      createdAt: new Date('2024-01-01T00:00:00Z'),
+      updatedAt: new Date('2024-01-01T00:00:00Z'),
+    };
+
+    const token = Token.hydrate(props);
+
+    expect(token.isUsed).toBe(true);
+  });
+
+  it('should return false if token has not been used', () => {
+    const props = {
+      id: 'token-id',
+      type: TokenType.EMAIL_CONFIRMATION,
+      expiresAt: new Date('2024-12-31T23:59:59Z'),
+      createdAt: new Date('2024-01-01T00:00:00Z'),
+      updatedAt: new Date('2024-01-01T00:00:00Z'),
+    };
+
+    const token = Token.hydrate(props);
+
+    expect(token.isUsed).toBe(false);
+  });
+
+  it('should return true if token has expired', () => {
+    const props = {
+      id: 'token-id',
+      type: TokenType.EMAIL_CONFIRMATION,
+      expiresAt: new Date('2022-12-31T23:59:59Z'),
+      createdAt: new Date('2022-01-01T00:00:00Z'),
+      updatedAt: new Date('2022-01-01T00:00:00Z'),
+    };
+
+    const token = Token.hydrate(props);
+
+    expect(token.isExpired).toBe(true);
+  });
+
+  it('should return false if token has not expired', () => {
+    const props = {
+      id: 'token-id',
+      type: TokenType.EMAIL_CONFIRMATION,
+      expiresAt: new Date('2999-12-31T23:59:59Z'),
+      createdAt: new Date('2024-01-01T00:00:00Z'),
+      updatedAt: new Date('2024-01-01T00:00:00Z'),
+    };
+
+    const token = Token.hydrate(props);
+
+    expect(token.isExpired).toBe(false);
+  });
+
+  it('should return true if token is not used, not expired and not deleted', () => {
+    const props = {
+      id: 'token-id',
+      type: TokenType.EMAIL_CONFIRMATION,
+      expiresAt: new Date('2999-12-31T23:59:59Z'),
+      createdAt: new Date('2024-01-01T00:00:00Z'),
+      updatedAt: new Date('2024-01-01T00:00:00Z'),
+    };
+
+    const token = Token.hydrate(props);
+
+    expect(token.isValid).toBe(true);
+  });
+
+  it('should return false if token is used', () => {
+    const props = {
+      id: 'token-id',
+      type: TokenType.EMAIL_CONFIRMATION,
+      expiresAt: new Date('2999-12-31T23:59:59Z'),
+      usedAt: new Date(),
+      createdAt: new Date('2024-01-01T00:00:00Z'),
+      updatedAt: new Date('2024-01-01T00:00:00Z'),
+    };
+
+    const token = Token.hydrate(props);
+
+    expect(token.isValid).toBe(false);
+  });
+
+  it('should return false if token is expired', () => {
+    const props = {
+      id: 'token-id',
+      type: TokenType.EMAIL_CONFIRMATION,
+      expiresAt: new Date('2022-12-31T23:59:59Z'),
+      createdAt: new Date('2022-01-01T00:00:00Z'),
+      updatedAt: new Date('2022-01-01T00:00:00Z'),
+    };
+
+    const token = Token.hydrate(props);
+
+    expect(token.isValid).toBe(false);
+  });
+
+  it('should return false if token is deleted', () => {
+    const props = {
+      id: 'token-id',
+      type: TokenType.EMAIL_CONFIRMATION,
+      expiresAt: new Date('2999-12-31T23:59:59Z'),
+      deletedAt: new Date(),
+      createdAt: new Date('2024-01-01T00:00:00Z'),
+      updatedAt: new Date('2024-01-01T00:00:00Z'),
+    };
+
+    const token = Token.hydrate(props);
+
+    expect(token.isValid).toBe(false);
+  });
+
+  it('should set deletedAt when token is valid', () => {
+    const props = {
+      id: 'token-id',
+      type: TokenType.EMAIL_CONFIRMATION,
+      expiresAt: new Date('2999-12-31T23:59:59Z'),
+      createdAt: new Date('2024-01-01T00:00:00Z'),
+      updatedAt: new Date('2024-01-01T00:00:00Z'),
+    };
+
+    const token = Token.hydrate(props);
+    token.invalidate();
+
+    expect(token.deletedAt).toBeInstanceOf(Date);
+  });
+
+  it('should not set deletedAt when token is already invalid', () => {
+    const props = {
+      id: 'token-id',
+      type: TokenType.EMAIL_CONFIRMATION,
+      expiresAt: new Date('2022-12-31T23:59:59Z'),
+      createdAt: new Date('2022-01-01T00:00:00Z'),
+      updatedAt: new Date('2022-01-01T00:00:00Z'),
+    };
+
+    const token = Token.hydrate(props);
+    token.invalidate();
+
+    expect(token.deletedAt).toBeUndefined();
+  });
 });

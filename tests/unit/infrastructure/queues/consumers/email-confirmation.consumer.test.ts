@@ -5,8 +5,6 @@ import { EmailConfirmationConsumer } from '@src/infrastructure/queues/consumers/
 import { UserFactory } from '@tests/mocks/factories/user.factory';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 import { InMemoryUsersRepository } from '@tests/mocks/repositories/users-repository';
-import { TokenType } from '@src/domain/users/entities/token.entity';
-import { TokenFactory } from '@tests/mocks/factories/token.factory';
 
 describe('EmailConfirmationConsumer', () => {
   let emailConfirmationConsumer: EmailConfirmationConsumer;
@@ -27,14 +25,13 @@ describe('EmailConfirmationConsumer', () => {
   });
 
   it('should be able to send a confirmation email', async () => {
-    const token = TokenFactory.create({ type: TokenType.EMAIL_CONFIRMATION });
-    const user = UserFactory.create({
-      tokens: [token],
-    });
+    const user = UserFactory.create();
     await usersRepository.save(user);
     const job = { data: { userId: user.id } };
 
     await emailConfirmationConsumer.process(job as Job);
+
+    const token = user.tokens.find((t) => t.type === 'EMAIL_CONFIRMATION');
 
     expect(mailerService.sendMail).toHaveBeenCalledWith({
       recipients: [{ address: user.email.value, name: user.name }],

@@ -67,6 +67,20 @@ export class Token extends Aggregate<TokenProps> {
   }
 
   get isUsed(): boolean {
-    return !!this.props.usedAt;
+    return !!this.usedAt;
+  }
+
+  get isExpired(): boolean {
+    return this.expiresAt < new Date();
+  }
+
+  get isValid(): boolean {
+    return !this.isUsed && !this.isExpired && !this.deletedAt;
+  }
+
+  public invalidate(): void {
+    if (this.isValid) {
+      this.props.deletedAt = new Date();
+    }
   }
 }
