@@ -20,10 +20,11 @@ export class TokenMapper {
       user_id: toPersist.userId,
       type: toPersist.type,
       expires_at: toPersist.expiresAt,
-      used_at: toPersist.usedAt || null,
+      used_at: toPersist.usedAt !== undefined ? toPersist.usedAt : null,
       created_at: toPersist.createdAt,
       updated_at: toPersist.updatedAt,
-      deleted_at: toPersist.deletedAt || null,
+      deleted_at:
+        toPersist.deletedAt !== undefined ? toPersist.deletedAt : null,
     };
   }
 
@@ -32,10 +33,10 @@ export class TokenMapper {
       id: raw.id,
       type: raw.type as TokenType,
       expiresAt: raw.expires_at,
-      usedAt: raw.used_at || undefined,
+      usedAt: raw.used_at !== null ? raw.used_at : undefined,
       createdAt: raw.created_at,
       updatedAt: raw.updated_at,
-      deletedAt: raw.deleted_at || undefined,
+      deletedAt: raw.deleted_at !== null ? raw.deleted_at : undefined,
     };
 
     return Token.hydrate(tokenProps);
