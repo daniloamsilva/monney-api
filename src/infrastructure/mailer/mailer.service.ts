@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { Address } from 'nodemailer/lib/mailer';
 import * as hbs from 'nodemailer-express-handlebars';
@@ -30,7 +30,8 @@ export class MailerService {
     try {
       return this.mailTransport().sendMail(options);
     } catch (error) {
-      console.error('Error while sending email', error);
+      Logger.error('Error while sending email', error, MailerService.name);
+      throw error;
     }
   }
 
