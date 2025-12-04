@@ -49,12 +49,12 @@ export class Token extends Aggregate<TokenProps> {
   }
 
   public static create(type: TokenType): Token {
-    const experionInMinutes = TOKEN_EXPIRATION_IN_MINUTES[type];
+    const expirationInMinutes = TOKEN_EXPIRATION_IN_MINUTES[type];
 
     const tokenProps: TokenProps = {
       id: crypto.randomUUID(),
       type: type,
-      expiresAt: addMinutes(new Date(), experionInMinutes),
+      expiresAt: addMinutes(new Date(), expirationInMinutes),
       createdAt: new Date(),
       updatedAt: new Date(),
     };
