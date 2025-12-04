@@ -25,12 +25,8 @@ export class EmailConfirmationConsumer extends WorkerHost {
       throw Error(`User with ID ${job.data.userId} not found`);
     }
 
-    user.createToken(TokenType.EMAIL_CONFIRMATION);
+    const token = user.createToken(TokenType.EMAIL_CONFIRMATION);
     await this.usersRepository.save(user);
-
-    const token = user.tokens.find(
-      (t) => t.type === TokenType.EMAIL_CONFIRMATION,
-    );
 
     try {
       await this.mailerService.sendMail({
