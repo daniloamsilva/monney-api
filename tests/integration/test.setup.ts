@@ -3,7 +3,7 @@ import { getQueueToken } from '@nestjs/bullmq';
 
 import { AppModule } from '@src/app.module';
 import { DatabaseService } from '@src/infrastructure/database/database.service';
-import { QueuesModule } from '@src/infrastructure/queues/queues.model';
+import { QueuesModule } from '@src/infrastructure/queues/queues.module';
 import { QueuesModule as MockQueuesModule } from '../mocks/models/queue.module';
 import { USERS_REPOSITORY_PROVIDER } from '@src/infrastructure/repositories/postgres/users.repository';
 import { QueueType } from '@src/infrastructure/queues/queues.enum';
