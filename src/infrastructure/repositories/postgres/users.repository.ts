@@ -47,13 +47,21 @@ export class UsersRepository implements IUsersRepository {
       return;
     }
 
+    const columns = [
+      'id',
+      'user_id',
+      'type',
+      'expires_at',
+      'used_at',
+      'deleted_at',
+    ];
     const values = [];
     const placeholders = [];
 
     tokens.forEach((token, index) => {
-      const offset = index * 5;
+      const offset = index * columns.length;
       placeholders.push(
-        `($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5})`,
+        `($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6})`,
       );
       values.push(
         token.id,
@@ -61,17 +69,19 @@ export class UsersRepository implements IUsersRepository {
         token.type,
         token.expires_at,
         token.used_at,
+        token.deleted_at,
       );
     });
 
     const query = `
-      INSERT INTO tokens (id, user_id, type, expires_at, used_at)
+      INSERT INTO tokens (${columns.join(', ')})
       VALUES ${placeholders.join(', ')}
       ON CONFLICT (id) DO UPDATE SET 
         user_id = EXCLUDED.user_id,
         type = EXCLUDED.type,
         expires_at = EXCLUDED.expires_at,
-        used_at = EXCLUDED.used_at;
+        used_at = EXCLUDED.used_at,
+        deleted_at = EXCLUDED.deleted_at;
     `;
 
     await this.database.query(query, values);
