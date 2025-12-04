@@ -20,6 +20,11 @@ export class EmailConfirmationConsumer extends WorkerHost {
 
   async process(job: Job<{ userId: string }>): Promise<void> {
     const user = await this.usersRepository.findById(job.data.userId);
+
+    if (!user) {
+      throw Error(`User with ID ${job.data.userId} not found`);
+    }
+
     user.createToken(TokenType.EMAIL_CONFIRMATION);
     await this.usersRepository.save(user);
 

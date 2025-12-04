@@ -24,6 +24,14 @@ describe('EmailConfirmationConsumer', () => {
     );
   });
 
+  it('should not be able to send a confirmation email if user does not exist', async () => {
+    const job = { data: { userId: 'non-existing-user-id' } };
+
+    await expect(emailConfirmationConsumer.process(job as Job)).rejects.toThrow(
+      `User with ID ${job.data.userId} not found`,
+    );
+  });
+
   it('should be able to send a confirmation email', async () => {
     const user = UserFactory.create();
     await usersRepository.save(user);
