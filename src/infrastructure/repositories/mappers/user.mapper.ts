@@ -1,7 +1,11 @@
 import { User, UserProps } from '@src/domain/users/entities/user.entity';
 import { Email } from '@src/domain/users/value-objects/email.vo';
 import { Password } from '@src/domain/users/value-objects/password.vo';
-import { TokenDbRow, TokenMapper } from './token.mapper';
+import {
+  TokenDbRow,
+  TokenMapper,
+  ToPersist as TokenToPersist,
+} from './token.mapper';
 
 interface UserDbRow {
   id: string;
@@ -30,7 +34,10 @@ export class UserMapper {
       deleted_at: user.deletedAt,
 
       tokens: user.tokens.map((token) =>
-        TokenMapper.toPersistence(Object.assign(token, { userId: user.id })),
+        TokenMapper.toPersistence({
+          ...token,
+          userId: user.id,
+        } as TokenToPersist),
       ),
     };
   }

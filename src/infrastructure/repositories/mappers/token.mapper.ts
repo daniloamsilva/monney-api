@@ -11,7 +11,7 @@ export interface TokenDbRow {
   deleted_at: Date | null;
 }
 
-type ToPersist = Token & { userId: string };
+export type ToPersist = Token & { userId: string };
 
 export class TokenMapper {
   public static toPersistence(toPersist: ToPersist): TokenDbRow {
