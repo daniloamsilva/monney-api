@@ -43,27 +43,38 @@ export class UsersRepository implements IUsersRepository {
   }
 
   private async saveTokens(tokens: TokenDbRow[]): Promise<void> {
-    const query = `
-      INSERT INTO tokens (id, user_id, type, expires_at, used_at)
-      VALUES ($1, $2, $3, $4, $5)
-      ON CONFLICT (id) DO UPDATE SET 
-        user_id = $2,
-        type = $3,
-        expires_at = $4,
-        used_at = $5;
-    `;
+    if (tokens.length === 0) {
+      return;
+    }
 
-    for (const token of tokens) {
-      const values = [
+    const values = [];
+    const placeholders = [];
+
+    tokens.forEach((token, index) => {
+      const offset = index * 5;
+      placeholders.push(
+        `($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5})`,
+      );
+      values.push(
         token.id,
         token.user_id,
         token.type,
         token.expires_at,
         token.used_at,
-      ];
+      );
+    });
 
-      await this.database.query(query, values);
-    }
+    const query = `
+      INSERT INTO tokens (id, user_id, type, expires_at, used_at)
+      VALUES ${placeholders.join(', ')}
+      ON CONFLICT (id) DO UPDATE SET 
+        user_id = EXCLUDED.user_id,
+        type = EXCLUDED.type,
+        expires_at = EXCLUDED.expires_at,
+        used_at = EXCLUDED.used_at;
+    `;
+
+    await this.database.query(query, values);
   }
 
   async findById(id: string): Promise<User | null> {
