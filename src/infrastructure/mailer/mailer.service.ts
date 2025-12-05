@@ -3,7 +3,7 @@ import * as nodemailer from 'nodemailer';
 import { Address } from 'nodemailer/lib/mailer';
 import * as hbs from 'nodemailer-express-handlebars';
 
-type mailOptions = {
+type MailOptions = {
   from?: Address;
   recipients: Address[];
   subject: string;
@@ -19,7 +19,7 @@ export class MailerService {
     this.transporter = this.createMailTransport();
   }
 
-  async sendMail(mailOptions: mailOptions) {
+  async sendMail(mailOptions: MailOptions) {
     const { from, recipients, subject, template, context } = mailOptions;
 
     const options = {
