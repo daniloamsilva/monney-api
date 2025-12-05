@@ -25,6 +25,10 @@ export class QueuesService {
       throw new UnprocessableEntityException(`Queue not found: ${queueType}`);
     }
 
-    await queue.add(`task-${queueType}-${Date.now()}`, { userId });
+    await queue.add(
+      `${queueType}`,
+      { userId },
+      { jobId: `${queueType}-${userId}-${Date.now()}` },
+    );
   }
 }
