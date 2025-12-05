@@ -13,6 +13,12 @@ type mailOptions = {
 
 @Injectable()
 export class MailerService {
+  private readonly transporter: nodemailer.Transporter;
+
+  constructor() {
+    this.transporter = this.createMailTransport();
+  }
+
   async sendMail(mailOptions: mailOptions) {
     const { from, recipients, subject, template, context } = mailOptions;
 
@@ -28,14 +34,14 @@ export class MailerService {
     };
 
     try {
-      return this.mailTransport().sendMail(options);
+      return this.transporter.sendMail(options);
     } catch (error) {
       Logger.error('Error while sending email', error, MailerService.name);
       throw error;
     }
   }
 
-  private mailTransport() {
+  private createMailTransport() {
     const transporter = nodemailer.createTransport({
       host: process.env.MAIL_HOST,
       port: parseInt(process.env.MAIL_PORT),
