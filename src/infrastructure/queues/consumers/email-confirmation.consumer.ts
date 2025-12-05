@@ -26,7 +26,6 @@ export class EmailConfirmationConsumer extends WorkerHost {
     }
 
     const token = user.createToken(TokenType.EMAIL_CONFIRMATION);
-    await this.usersRepository.save(user);
 
     try {
       await this.mailerService.sendMail({
@@ -39,6 +38,8 @@ export class EmailConfirmationConsumer extends WorkerHost {
           from: process.env.MAIL_FROM_NAME,
         },
       });
+
+      await this.usersRepository.save(user);
     } catch (error) {
       Logger.error(
         'Error sending confirmation email:',
