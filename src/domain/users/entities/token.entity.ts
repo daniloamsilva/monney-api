@@ -1,4 +1,5 @@
 import { addMinutes } from 'date-fns';
+import { v7 as uuid } from 'uuid';
 
 import { Aggregate } from '@src/shared/domain/Aggregate';
 
@@ -52,7 +53,7 @@ export class Token extends Aggregate<TokenProps> {
     const expirationInMinutes = TOKEN_EXPIRATION_IN_MINUTES[type];
 
     const tokenProps: TokenProps = {
-      id: crypto.randomUUID(),
+      id: uuid(),
       type: type,
       expiresAt: addMinutes(new Date(), expirationInMinutes),
       createdAt: new Date(),
