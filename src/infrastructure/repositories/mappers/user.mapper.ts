@@ -34,10 +34,9 @@ export class UserMapper {
       deleted_at: user.deletedAt,
 
       tokens: user.tokens.map((token) =>
-        TokenMapper.toPersistence({
-          ...token,
-          userId: user.id,
-        } as TokenToPersist),
+        TokenMapper.toPersistence(
+          Object.assign(token, { userId: user.id }) as TokenToPersist,
+        ),
       ),
     };
   }
