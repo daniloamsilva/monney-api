@@ -45,6 +45,7 @@ export class EmailConfirmationConsumer extends WorkerHost {
         error,
         EmailConfirmationConsumer.name,
       );
+      throw error;
     }
   }
 }
