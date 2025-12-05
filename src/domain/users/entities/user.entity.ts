@@ -88,11 +88,9 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   public createToken(type: TokenType): Token {
-    this.tokens.forEach((token) => {
-      if (token.type === type) {
-        token.invalidate();
-      }
-    });
+    this.tokens
+      .filter((token) => token.type === type)
+      .forEach((token) => token.invalidate());
 
     const token = Token.create(type);
     this.tokens.push(token);
