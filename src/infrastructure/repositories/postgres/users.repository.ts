@@ -4,6 +4,9 @@ import { IUsersRepository } from '@src/domain/users/repositories/users-repositor
 import { DatabaseService } from '@src/infrastructure/database/database.service';
 import { User } from '@src/domain/users/entities/user.entity';
 import { UserMapper } from '../mappers/user.mapper';
+import { TokenDbRow } from '../mappers/token.mapper';
+
+export const USERS_REPOSITORY_PROVIDER = 'IUsersRepository';
 
 @Injectable()
 export class UsersRepository implements IUsersRepository {
@@ -36,6 +39,52 @@ export class UsersRepository implements IUsersRepository {
     ];
 
     await this.database.query(query, values);
+    await this.saveTokens(data.tokens);
+  }
+
+  private async saveTokens(tokens: TokenDbRow[]): Promise<void> {
+    if (tokens.length === 0) {
+      return;
+    }
+
+    const columns = [
+      'id',
+      'user_id',
+      'type',
+      'expires_at',
+      'used_at',
+      'deleted_at',
+    ];
+    const values = [];
+    const placeholders = [];
+
+    tokens.forEach((token, index) => {
+      const offset = index * columns.length;
+      placeholders.push(
+        `($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6})`,
+      );
+      values.push(
+        token.id,
+        token.user_id,
+        token.type,
+        token.expires_at,
+        token.used_at,
+        token.deleted_at,
+      );
+    });
+
+    const query = `
+      INSERT INTO tokens (${columns.join(', ')})
+      VALUES ${placeholders.join(', ')}
+      ON CONFLICT (id) DO UPDATE SET 
+        user_id = EXCLUDED.user_id,
+        type = EXCLUDED.type,
+        expires_at = EXCLUDED.expires_at,
+        used_at = EXCLUDED.used_at,
+        deleted_at = EXCLUDED.deleted_at;
+    `;
+
+    await this.database.query(query, values);
   }
 
   async findById(id: string): Promise<User | null> {
@@ -54,6 +103,7 @@ export class UsersRepository implements IUsersRepository {
     }
 
     const row = rows[0];
+    row.tokens = await this.findTokensByUserId(row.id);
 
     return UserMapper.toDomain(row);
   }
@@ -74,6 +124,22 @@ export class UsersRepository implements IUsersRepository {
     }
 
     const row = rows[0];
+    row.tokens = await this.findTokensByUserId(row.id);
+
     return UserMapper.toDomain(row);
+  }
+
+  private async findTokensByUserId(userId: string): Promise<TokenDbRow[]> {
+    const rows = await this.database.query(
+      `
+        SELECT id, type, expires_at, used_at, created_at, updated_at, deleted_at
+        FROM tokens
+        WHERE user_id = $1
+        AND deleted_at IS NULL;
+      `,
+      [userId],
+    );
+
+    return rows;
   }
 }

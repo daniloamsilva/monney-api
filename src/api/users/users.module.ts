@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { Providers } from '@src/infrastructure/repositories/providers.enum';
+import { DomainEvent } from '@src/shared/domain/DomainEvent';
 
 // Controllers
 import { CreateUserController } from './controllers/create-user.controller';
@@ -9,16 +9,42 @@ import { CreateUserController } from './controllers/create-user.controller';
 import { CreateUserService } from '@src/application/users/use-cases/create-user.service';
 
 // Repositories
-import { UsersRepository } from '@src/infrastructure/repositories/postgres/users.repository';
+import {
+  USERS_REPOSITORY_PROVIDER,
+  UsersRepository,
+} from '@src/infrastructure/repositories/postgres/users.repository';
+
+// Events
+import { UserCreatedEvent } from '@src/domain/users/events/user-created.event';
+
+// Event Handlers
+import {
+  SEND_EMAIL_CONFIRMATION_HANDLER_PROVIDER,
+  SendEmailConfirmationHandler,
+} from '@src/infrastructure/event-handlers/send-email-confirmation.handler';
 
 @Module({
   imports: [],
   controllers: [CreateUserController],
   providers: [
+    // Services
     CreateUserService,
+
+    // Repositories
     {
-      provide: Providers.USERS_REPOSITORY,
+      provide: USERS_REPOSITORY_PROVIDER,
       useClass: UsersRepository,
+    },
+
+    // Event Handlers
+    SendEmailConfirmationHandler,
+    {
+      provide: SEND_EMAIL_CONFIRMATION_HANDLER_PROVIDER,
+      useFactory: (handler: SendEmailConfirmationHandler) => {
+        DomainEvent.register(handler, UserCreatedEvent.name);
+        return handler;
+      },
+      inject: [SendEmailConfirmationHandler],
     },
   ],
 })

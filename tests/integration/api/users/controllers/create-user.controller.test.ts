@@ -1,6 +1,7 @@
 import * as request from 'supertest';
 import { HttpStatus } from '@nestjs/common';
 import { INestApplication } from '@nestjs/common';
+import { Queue } from 'bullmq';
 
 import { TestSetup } from '@tests/integration/test.setup';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
@@ -9,9 +10,11 @@ import { UserFactory } from '@tests/mocks/factories/user.factory';
 describe('CreateUserController', () => {
   let app: INestApplication;
   let usersRepository: IUsersRepository;
+  let emailConfirmationQueue: Queue;
 
   beforeAll(async () => {
-    ({ app, usersRepository } = await TestSetup.setup());
+    ({ app, usersRepository, emailConfirmationQueue } =
+      await TestSetup.setup());
   });
 
   afterAll(async () => {
@@ -72,6 +75,11 @@ describe('CreateUserController', () => {
   });
 
   it('should be able to create a new user successfully', async () => {
+    const emailConfirmationQueueAddSpy = jest.spyOn(
+      emailConfirmationQueue,
+      'add',
+    );
+
     const response = await request(app.getHttpServer()).post('/users').send({
       name: 'John Doe',
       email: 'johndoe@email.com',
@@ -81,5 +89,6 @@ describe('CreateUserController', () => {
 
     expect(response.status).toBe(HttpStatus.CREATED);
     expect(response.body.message).toBe('User created successfully');
+    expect(emailConfirmationQueueAddSpy).toHaveBeenCalled();
   });
 });

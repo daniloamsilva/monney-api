@@ -8,6 +8,7 @@ import { DatabaseModule } from './infrastructure/database/database.module';
 import { UsersModule } from './api/users/users.module';
 import { DomainErrorFilter } from './api/shared/filters/domain-error.filter';
 import { ClassValidatorFilter } from './api/shared/filters/class-validator.filter';
+import { QueuesModule } from './infrastructure/queues/queues.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ClassValidatorFilter } from './api/shared/filters/class-validator.filte
       throttlers: [{ ttl: 60000, limit: 10 }],
     }),
     DatabaseModule,
+    QueuesModule,
     UsersModule,
   ],
   providers: [

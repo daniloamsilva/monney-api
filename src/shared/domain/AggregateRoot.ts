@@ -1,14 +1,8 @@
-import { Entity } from './Entity';
+import { Aggregate } from './Aggregate';
 import { IDomainEvent } from './IDomainEvent';
 
-export abstract class AggregateRoot<T> extends Entity<T> {
-  protected props: T;
+export abstract class AggregateRoot<T> extends Aggregate<T> {
   private _domainEvents: IDomainEvent[] = [];
-
-  constructor(props: T & { id: string }) {
-    super(props.id);
-    this.props = props;
-  }
 
   get domainEvents(): readonly IDomainEvent[] {
     return Object.freeze([...this._domainEvents]);

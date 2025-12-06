@@ -23,6 +23,7 @@ describe('UserEntity', () => {
           name: 'Test User',
           password: expect.any(Password),
           isActive: true,
+          tokens: [],
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         }),
@@ -77,9 +78,10 @@ describe('UserEntity', () => {
       name: 'Test User',
       password: password,
       isActive: true,
+      confirmedAt: new Date('2024-01-01'),
+      tokens: [],
       createdAt: new Date('2024-01-01'),
       updatedAt: new Date('2024-01-02'),
-      confirmedAt: new Date('2024-01-01'),
       deletedAt: null,
     };
 
@@ -97,6 +99,7 @@ describe('UserEntity', () => {
             props: { value: '$2b$10$hashedpassword' },
           }),
           isActive: true,
+          tokens: [],
           createdAt: new Date('2024-01-01'),
           updatedAt: new Date('2024-01-02'),
           confirmedAt: new Date('2024-01-01'),
@@ -117,6 +120,7 @@ describe('UserEntity', () => {
       name: 'Test User',
       password: password,
       isActive: false,
+      tokens: [],
       createdAt: new Date('2024-01-01'),
       updatedAt: new Date('2024-01-02'),
     };
@@ -135,6 +139,7 @@ describe('UserEntity', () => {
             props: { value: '$2b$10$hashedpassword' },
           }),
           isActive: false,
+          tokens: [],
           createdAt: new Date('2024-01-01'),
           updatedAt: new Date('2024-01-02'),
         }),

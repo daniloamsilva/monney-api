@@ -17,6 +17,7 @@ const config: Config = {
     '/tests/',
     '/scripts/',
     '/src/shared/',
+    '/src/infrastructure/mailer/',
     'jest.config.ts',
     'main.ts',
   ],
