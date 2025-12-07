@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { IHandle } from '@src/shared/domain/IDomainEvent';
+import { IHandle } from '@src/domain/shared/IDomainEvent';
 import { UserCreatedEvent } from '@src/domain/users/events/user-created.event';
 import { QueuesService } from '@src/infrastructure/queues/queues.service';
 import { QueueType } from '@src/infrastructure/queues/queues.enum';

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { DomainEvent } from '@src/shared/domain/DomainEvent';
+import { DomainEvent } from '@src/domain/shared/DomainEvent';
 
 // Controllers
 import { CreateUserController } from './controllers/create-user.controller';

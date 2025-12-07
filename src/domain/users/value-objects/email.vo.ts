@@ -1,5 +1,5 @@
-import { ValueObject } from '@src/shared/domain/ValueObject';
-import { DomainError } from '@src/shared/domain/DomainError';
+import { ValueObject } from '@src/domain/shared/ValueObject';
+import { DomainError } from '@src/domain/shared/DomainError';
 
 interface EmailProps {
   value: string;

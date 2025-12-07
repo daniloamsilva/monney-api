@@ -1,5 +1,5 @@
 import { Password } from '@src/domain/users/value-objects/password.vo';
-import { DomainError } from '@src/shared/domain/DomainError';
+import { DomainError } from '@src/domain/shared/DomainError';
 
 describe('PasswordValueObject', () => {
   describe('create', () => {

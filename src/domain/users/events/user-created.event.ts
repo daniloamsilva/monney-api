@@ -1,4 +1,4 @@
-import { IDomainEvent } from '@src/shared/domain/IDomainEvent';
+import { IDomainEvent } from '@src/domain/shared/IDomainEvent';
 
 interface UserCreatedEventProps {
   aggregateId: string;

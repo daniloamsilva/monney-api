@@ -5,7 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 
-import { DomainEvent } from '@src/shared/domain/DomainEvent';
+import { DomainEvent } from '@src/domain/shared/DomainEvent';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 import { User } from '@src/domain/users/entities/user.entity';
 import { CreateUserDto } from '../dtos/create-user.dto';

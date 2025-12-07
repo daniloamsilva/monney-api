@@ -1,7 +1,7 @@
 import { addMinutes } from 'date-fns';
 import { v7 as uuid } from 'uuid';
 
-import { Aggregate } from '@src/shared/domain/Aggregate';
+import { Aggregate } from '@src/domain/shared/Aggregate';
 
 interface TokenProps {
   id: string;
