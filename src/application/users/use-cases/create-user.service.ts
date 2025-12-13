@@ -8,7 +8,7 @@ import {
 import { DomainEvent } from '@src/domain/shared/DomainEvent';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 import { User } from '@src/domain/users/entities/user.entity';
-import { CreateUserDto } from '../dtos/create-user.dto';
+import { CreateUserRequestDto } from '../dtos/create-user-request.dto';
 import { USERS_REPOSITORY_PROVIDER } from '@src/infrastructure/repositories/postgres/users.repository';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class CreateUserService {
     private readonly usersRepository: IUsersRepository,
   ) {}
 
-  async execute(input: CreateUserDto): Promise<void> {
+  async execute(input: CreateUserRequestDto): Promise<void> {
     if (input.password !== input.passwordConfirmation) {
       throw new BadRequestException("Passwords don't match");
     }

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 
 import { DomainEvent } from '@src/domain/shared/DomainEvent';
 
@@ -24,7 +25,13 @@ import {
 } from '@src/infrastructure/event-handlers/send-email-confirmation.handler';
 
 @Module({
-  imports: [],
+  imports: [
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '7d' },
+    }),
+  ],
   controllers: [CreateUserController],
   providers: [
     // Services
