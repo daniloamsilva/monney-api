@@ -53,6 +53,15 @@ describe('LoginController', () => {
     expect(response.body.message).toEqual('Invalid email or password');
   });
 
+  it('should not be able to login with missing password', async () => {
+    const response = await request(app.getHttpServer()).post('/login').send({
+      email: user.email.value,
+    });
+
+    expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    expect(response.body.message).toEqual('password must be a string');
+  });
+
   it('should be able to login', async () => {
     const response = await request(app.getHttpServer()).post('/login').send({
       email: user.email.value,
