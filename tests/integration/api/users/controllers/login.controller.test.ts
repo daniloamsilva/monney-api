@@ -23,7 +23,7 @@ describe('LoginController', () => {
     await app.close();
   });
 
-  it('should not be able to login with a invalid email format', async () => {
+  it('should not be able to login with an invalid email format', async () => {
     const response = await request(app.getHttpServer()).post('/login').send({
       email: 'invalid-format-email',
       password: 'password',
