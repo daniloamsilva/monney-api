@@ -13,10 +13,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { Public } from '@src/api/shared/decorators/public-route.decorator';
-import { DatabaseTransactionInterceptor } from '@src/api/shared/interceptors/database-transaction.interceptor';
+import { Public } from '@src/application/shared/decorators/public-route.decorator';
+import { DatabaseTransactionInterceptor } from '@src/application/shared/interceptors/database-transaction.interceptor';
 import { CreateUserRequestDto } from '@src/application/users/dtos/create-user-request.dto';
-import { CreateUserService } from '@src/application/users/use-cases/create-user.service';
+import { CreateUserService } from '@src/application/users/services/create-user.service';
 
 @Public()
 @ApiTags('Users')

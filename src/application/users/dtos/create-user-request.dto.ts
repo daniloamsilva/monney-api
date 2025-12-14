@@ -1,7 +1,7 @@
 import { IsEmail, IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { Match } from '@src/api/shared/validators/match.validator';
+import { Match } from '@src/application/shared/validators/match.validator';
 
 export class CreateUserRequestDto {
   @ApiProperty({

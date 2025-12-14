@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { LoginService } from '@src/application/users/use-cases/login.service';
+import { LoginService } from '@src/application/users/services/login.service';
 import { User } from '@src/domain/users/entities/user.entity';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 import { Password } from '@src/domain/users/value-objects/password.vo';

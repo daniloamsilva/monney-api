@@ -1,4 +1,4 @@
-import { CreateUserService } from '@src/application/users/use-cases/create-user.service';
+import { CreateUserService } from '@src/application/users/services/create-user.service';
 import { IUsersRepository } from '@src/domain/users/repositories/users-repository.interface';
 import { Password } from '@src/domain/users/value-objects/password.vo';
 import { UserFactory } from '@tests/mocks/factories/user.factory';

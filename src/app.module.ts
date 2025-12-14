@@ -5,9 +5,9 @@ import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 
 import { DatabaseModule } from './infrastructure/database/database.module';
 
-import { UsersModule } from './api/users/users.module';
-import { DomainErrorFilter } from './api/shared/filters/domain-error.filter';
-import { ClassValidatorFilter } from './api/shared/filters/class-validator.filter';
+import { UsersModule } from './application/users/users.module';
+import { DomainErrorFilter } from './application/shared/filters/domain-error.filter';
+import { ClassValidatorFilter } from './application/shared/filters/class-validator.filter';
 import { QueuesModule } from './infrastructure/queues/queues.module';
 
 @Module({

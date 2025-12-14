@@ -6,10 +6,10 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-import { LoginService } from '@src/application/users/use-cases/login.service';
+import { LoginService } from '@src/application/users/services/login.service';
 import { LoginRequestDto } from '@src/application/users/dtos/login-request.dto';
 import { LoginResponseDto } from '@src/application/users/dtos/login-response.dto';
-import { Public } from '@src/api/shared/decorators/public-route.decorator';
+import { Public } from '@src/application/shared/decorators/public-route.decorator';
 
 @Public()
 @ApiTags('Users')

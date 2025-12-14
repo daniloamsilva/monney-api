@@ -8,8 +8,8 @@ import { CreateUserController } from './controllers/create-user.controller';
 import { LoginController } from './controllers/login.controller';
 
 // Services
-import { CreateUserService } from '@src/application/users/use-cases/create-user.service';
-import { LoginService } from '@src/application/users/use-cases/login.service';
+import { CreateUserService } from '@src/application/users/services/create-user.service';
+import { LoginService } from '@src/application/users/services/login.service';
 
 // Repositories
 import {
