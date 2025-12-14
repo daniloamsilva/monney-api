@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { USERS_REPOSITORY_PROVIDER } from '@src/infrastructure/repositories/postgres/users.repository';
@@ -18,13 +18,13 @@ export class LoginService {
     const user = await this.usersRepository.findByEmail(input.email);
 
     if (!user) {
-      throw new NotFoundException('Invalid email or password');
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     const isPasswordValid = await user.validatePassword(input.password);
 
     if (!isPasswordValid) {
-      throw new NotFoundException('Invalid email or password');
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     const payload = { sub: user.id, email: user.email };
