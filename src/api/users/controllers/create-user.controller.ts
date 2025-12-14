@@ -15,7 +15,7 @@ import {
 
 import { Public } from '@src/api/shared/decorators/public-route.decorator';
 import { DatabaseTransactionInterceptor } from '@src/api/shared/interceptors/database-transaction.interceptor';
-import { CreateUserDto } from '@src/application/users/dtos/create-user.dto';
+import { CreateUserRequestDto } from '@src/application/users/dtos/create-user-request.dto';
 import { CreateUserService } from '@src/application/users/use-cases/create-user.service';
 
 @Public()
@@ -57,7 +57,7 @@ export class CreateUserController {
     },
   })
   @Post()
-  async handle(@Body() data: CreateUserDto) {
+  async handle(@Body() data: CreateUserRequestDto) {
     await this.createUserService.execute(data);
     return { message: 'User created successfully' };
   }

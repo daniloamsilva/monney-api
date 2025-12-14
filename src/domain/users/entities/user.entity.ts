@@ -87,6 +87,10 @@ export class User extends AggregateRoot<UserProps> {
     return user;
   }
 
+  public validatePassword(plainTextPassword: string): Promise<boolean> {
+    return this.props.password.compare(plainTextPassword);
+  }
+
   public createToken(type: TokenType): Token {
     this.tokens
       .filter((token) => token.type === type)

@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { Match } from '@src/api/shared/validators/match.validator';
 
-export class CreateUserDto {
+export class CreateUserRequestDto {
   @ApiProperty({
     description: 'User name',
     example: 'John Doe',
