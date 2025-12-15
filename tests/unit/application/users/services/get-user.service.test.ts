@@ -13,13 +13,13 @@ describe('GetUserService', () => {
     getUserService = new GetUserService(usersRepository);
   });
 
-  it('should not be able to get an user information if user does not exist', async () => {
+  it('should not be able to get a user information if user does not exist', async () => {
     await expect(getUserService.execute('non-existing-id')).rejects.toThrow(
       'User not found',
     );
   });
 
-  it('should be able to get an user information', async () => {
+  it('should be able to get a user information', async () => {
     const user = UserFactory.create();
     await usersRepository.save(user);
 
