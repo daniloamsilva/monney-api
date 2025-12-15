@@ -101,6 +101,19 @@ export class User extends AggregateRoot<UserProps> {
     return token;
   }
 
+  public toJSON(): Omit<UserProps, 'password' | 'tokens'> {
+    return {
+      id: this.props.id,
+      email: this.props.email.value as any,
+      name: this.props.name,
+      confirmedAt: this.props.confirmedAt,
+      isActive: this.props.isActive,
+      createdAt: this.props.createdAt,
+      updatedAt: this.props.updatedAt,
+      deletedAt: this.props.deletedAt,
+    };
+  }
+
   public static hydrate(props: UserProps): User {
     return new User(props);
   }
