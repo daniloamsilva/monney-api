@@ -6,10 +6,12 @@ import { DomainEvent } from '@src/domain/shared/DomainEvent';
 // Controllers
 import { CreateUserController } from './controllers/create-user.controller';
 import { LoginController } from './controllers/login.controller';
+import { GetUserController } from './controllers/get-user.controller';
 
 // Services
 import { CreateUserService } from '@src/application/users/services/create-user.service';
 import { LoginService } from '@src/application/users/services/login.service';
+import { GetUserService } from './services/get-user.service';
 
 // Repositories
 import {
@@ -34,11 +36,12 @@ import {
       signOptions: { expiresIn: '7d' },
     }),
   ],
-  controllers: [CreateUserController, LoginController],
+  controllers: [CreateUserController, LoginController, GetUserController],
   providers: [
     // Services
     CreateUserService,
     LoginService,
+    GetUserService,
 
     // Repositories
     {
