@@ -1,4 +1,5 @@
 export enum Providers {
   USERS_REPOSITORY = 'UsersRepository',
   TOKENS_REPOSITORY = 'TokensRepository',
+  WALLETS_REPOSITORY = 'WalletsRepository',
 }

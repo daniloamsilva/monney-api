@@ -22,6 +22,7 @@ import { ResetPasswordService } from './use-cases/reset-password/reset-password.
 
 import { UsersPostgresRepository } from '@/repositories/users/users-postgres.repository';
 import { TokensPostgresRepository } from '@/repositories/tokens/tokens-postgres.repository';
+import { WalletsPostgresRepository } from '@/repositories/wallets/wallets-postgres.repository';
 
 @Module({
   controllers: [
@@ -50,6 +51,10 @@ import { TokensPostgresRepository } from '@/repositories/tokens/tokens-postgres.
     {
       provide: Providers.TOKENS_REPOSITORY,
       useClass: TokensPostgresRepository,
+    },
+    {
+      provide: Providers.WALLETS_REPOSITORY,
+      useClass: WalletsPostgresRepository,
     },
   ],
 })
