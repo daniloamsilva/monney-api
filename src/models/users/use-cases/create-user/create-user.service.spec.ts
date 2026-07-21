@@ -1,7 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { Queue } from 'bullmq';
 
-import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { CreateUserService } from './create-user.service';
 import { UsersInMemoryRepository } from '@/repositories/users/users-in-memory.repository';
 import { UserFactory } from '@/entities/user/user.factory';
@@ -10,7 +9,7 @@ import { QueuesService } from '@/infra/queues/queues.service';
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
   let queuesService: QueuesService;
-  let usersRepository: UsersRepositoryInterface;
+  let usersRepository: UsersInMemoryRepository;
   let confirmationEmailQueue: Queue;
 
   beforeEach(() => {
@@ -46,6 +45,7 @@ describe('CreateUserService', () => {
     });
 
     const newUser = await usersRepository.findByEmail('johndoe@email.com');
+    const defaultWallet = usersRepository.findDefaultWalletByUserId(newUser.id);
 
     expect(newUser.id).toBeDefined();
     expect(newUser.name).toBe('John Doe');
@@ -54,6 +54,12 @@ describe('CreateUserService', () => {
     expect(newUser.createdAt).not.toBeNull();
     expect(newUser.updatedAt).not.toBeNull();
     expect(newUser.deletedAt).toBeNull();
+    expect(defaultWallet).toMatchObject({
+      userId: newUser.id,
+      name: 'Carteira',
+      initialBalance: 0,
+      isDefault: true,
+    });
 
     expect(confirmationEmailQueue.add).toHaveBeenCalledTimes(1);
 
@@ -61,5 +67,26 @@ describe('CreateUserService', () => {
       statusCode: HttpStatus.CREATED,
       message: 'User created successfully',
     });
+  });
+
+  it('should rollback user creation when default wallet creation fails', async () => {
+    usersRepository = new UsersInMemoryRepository({
+      failOnDefaultWalletCreation: true,
+    });
+    createUserService = new CreateUserService(usersRepository, queuesService);
+
+    await expect(
+      createUserService.execute({
+        name: 'John Doe',
+        email: 'johndoe@email.com',
+        password: 'pass1234',
+        passwordConfirmation: 'pass1234',
+      }),
+    ).rejects.toThrow('Default wallet creation failed');
+
+    const newUser = await usersRepository.findByEmail('johndoe@email.com');
+
+    expect(newUser).toBeUndefined();
+    expect(confirmationEmailQueue.add).not.toHaveBeenCalled();
   });
 });

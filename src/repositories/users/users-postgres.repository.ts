@@ -43,12 +43,6 @@ export class UsersPostgresRepository implements UsersRepositoryInterface {
       user.id = uuid();
       await user.changePassword(user.password);
 
-      query = `
-        INSERT INTO users (id, name, email, password, created_at, updated_at)
-        VALUES ($1, $2, $3, $4, $5, $6)
-        RETURNING *;
-      `;
-
       values = [
         user.id,
         user.name,
@@ -57,6 +51,27 @@ export class UsersPostgresRepository implements UsersRepositoryInterface {
         user.createdAt,
         user.updatedAt,
       ];
+
+      return this.database.transaction(async () => {
+        const rows = await this.database.query(
+          `
+            INSERT INTO users (id, name, email, password, created_at, updated_at)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING *;
+          `,
+          values,
+        );
+
+        await this.database.query(
+          `
+            INSERT INTO wallets (user_id, name, initial_balance, is_default)
+            VALUES ($1, $2, $3, $4);
+          `,
+          [user.id, 'Carteira', 0, true],
+        );
+
+        return new User(mapSnakeToCamel(rows[0]));
+      });
     }
 
     const rows = await this.database.query(query, values);

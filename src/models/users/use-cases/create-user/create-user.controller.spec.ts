@@ -1,16 +1,19 @@
 import * as request from 'supertest';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 
+import { DatabaseService } from '@/infra/database/database.service';
 import { UsersRepositoryInterface } from '@/repositories/users/users.repository.interface';
 import { UserFactory } from '@/entities/user/user.factory';
 import { TestHelper } from '@/utils/test.helper';
 
 describe('CreateUserController', () => {
   let app: INestApplication;
+  let database: DatabaseService;
   let usersRepository: UsersRepositoryInterface;
 
   beforeAll(async () => {
     ({ app, usersRepository } = await TestHelper.setup());
+    database = app.get(DatabaseService);
   });
 
   afterAll(async () => {
@@ -78,6 +81,28 @@ describe('CreateUserController', () => {
       passwordConfirmation: 'pass1234',
     });
 
+    const [newUser] = await database.query(
+      `
+        SELECT id FROM users
+        WHERE email = $1;
+      `,
+      ['johndoe@email.com'],
+    );
+    const [defaultWallet] = await database.query(
+      `
+        SELECT user_id, name, initial_balance, is_default
+        FROM wallets
+        WHERE user_id = $1;
+      `,
+      [newUser.id],
+    );
+
     expect(response.status).toBe(HttpStatus.CREATED);
+    expect(defaultWallet).toMatchObject({
+      user_id: newUser.id,
+      name: 'Carteira',
+      initial_balance: '0.00',
+      is_default: true,
+    });
   });
 });
