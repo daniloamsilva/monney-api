@@ -1,5 +1,4 @@
 services:
-
   database:
     container_name: database
     image: postgres:17.2-alpine3.21
@@ -27,7 +26,7 @@ services:
   redis:
     container_name: redis
     image: redis:7.4-alpine
-    command: [ "redis-server", "--requirepass", "${REDIS_PASSWORD}" ]
+    command: ['redis-server', '--requirepass', '${REDIS_PASSWORD}']
     environment:
       - REDIS_PASSWORD=your_secure_password
     ports:
@@ -42,3 +41,17 @@ services:
     environment:
       - MAILPIT_UI_PORT=8025
       - MAILPIT_SMTP_PORT=1025
+
+  adminer:
+    container_name: adminer
+    image: msav/adminer-autologin:latest
+    ports:
+      - '8080:8080'
+    environment:
+      - ADMINER_DRIVER=pgsql
+      - ADMINER_SERVER=database
+      - ADMINER_USERNAME=${DB_USERNAME}
+      - ADMINER_PASSWORD=${DB_PASSWORD}
+      - ADMINER_DB=${DB_DATABASE}
+    depends_on:
+      - database
